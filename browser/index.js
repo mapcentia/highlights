@@ -50,26 +50,27 @@ var urlVars = urlparser.urlVars;
 var todoItems = [];
 
 var source1 =
-    '<a href="javascript:void(0)" class="btn btn-default btn-fab" data-todo-id="{{id}}"><i class="material-icons">directions</i></a>' +
-    '<h1>{{{title}}}</h1>' +
-    '<div>{{{text1}}}</div>' +
+    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-fab-mini" data-todo-id="{{id}}"><i class="material-icons">directions</i></a>' +
+    '<h1>{{{titel}}}</h1>' +
+    '<div><b>{{{manchet}}}</b></div>' +
+    '<div>{{{beskrivelse}}}</div>' +
     '<div id="myCarousel" class="carousel slide" data-ride="carousel">' +
 
     '<ol class="carousel-indicators">' +
-    '{{#images}}' +
+    '{{#foto_karrusel}}' +
     '<li data-target="#myCarousel" data-slide-to="{{@index}}"  class="{{#if @first}}active{{/if}}"></li>' +
-    '{{/images}}' +
+    '{{/foto_karrusel}}' +
     '</ol>' +
 
     '<div class="carousel-inner" role="listbox">' +
-    '{{#images}}' +
+    '{{#foto_karrusel}}' +
     '<div class="item {{#if @first}}active{{/if}}">' +
-    '<img style="width: 100%" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/{{.}}" alt="">' +
+    '<img style="width: 100%" src="{{.}}" alt="">' +
     '<div class="carousel-caption">' +
     '<p>{{[1]}}</p>' +
     '</div>' +
     '</div>' +
-    '{{/images}}' +
+    '{{/foto_karrusel}}' +
     '</div>' +
 
 
@@ -120,7 +121,7 @@ module.exports = module.exports = {
     },
     init: function () {
 
-        var parent = this, layerName = "v:punkter.poi";
+        var parent = this, layerName = "v:_l_den_gode_tur.interessepunkter";
 
         vectorLayers.setOnEachFeature(layerName, function (feature, layer) {
             layer.on("click", function () {
@@ -195,8 +196,8 @@ module.exports = module.exports = {
                     sortable: true
                 },
                 {
-                    header: "Tid",
-                    dataIndex: "tid",
+                    header: "Info",
+                    dataIndex: "kort_detaljetekst",
                     sortable: true
                 }
             ]
@@ -215,15 +216,16 @@ module.exports = module.exports = {
 
                 return L.marker(latlng, {
                     icon: L.ExtraMarkers.icon({
-                        icon: 'fa-number',
-                        number: 'V',
-                        markerColor: 'red',
-                        shape: feature.properties.tid === "Vikingetid" ? 'star' :
-                            feature.properties.tid === "Stenalder" ? 'square' :
-                                feature.properties.tid === "Middelalder" ? 'penta' :
-                                    feature.properties.tid === "Jernalder" ? 'circle' :
-                                        'circle'
-                        ,
+                        icon: 'fa-eye',
+                        //number: 'V',
+                        markerColor: 'green-light',
+                        shape: 'star',
+                        // shape: feature.properties.tid === "Vikingetid" ? 'star' :
+                        //     feature.properties.tid === "Stenalder" ? 'square' :
+                        //         feature.properties.tid === "Middelalder" ? 'penta' :
+                        //             feature.properties.tid === "Jernalder" ? 'circle' :
+                        //                 'circle'
+                        // ,
                         prefix: 'fa',
                         iconColor: "#ffffff",
                         //innerHTML: '<svg width="20" height="30"> <circle cx="10" cy="15" r="10" stroke="green" stroke-width="1" fill="yellow" /> </svg>'
@@ -245,9 +247,9 @@ module.exports = module.exports = {
 
     createInfoContent: function (id) {
 
-        featuresWithKeys[id].text1 = converter.makeHtml(featuresWithKeys[id].tekst);
-        featuresWithKeys[id].title = featuresWithKeys[id].titel;
-        featuresWithKeys[id].images = featuresWithKeys[id].billeder;
+        //featuresWithKeys[id].text1 = converter.makeHtml(featuresWithKeys[id].tekst);
+        //featuresWithKeys[id].title = featuresWithKeys[id].titel;
+        //featuresWithKeys[id].images = featuresWithKeys[id].billeder;
 
         var html = template1(featuresWithKeys[id]);
 
