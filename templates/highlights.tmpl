@@ -1,0 +1,393 @@
+<style>
+    #list {
+        position: absolute;
+        height: 100%;
+        right: 0;
+        left: 0;
+        z-index: 1;
+        background-color: #ffffff;
+        display: none;
+    }
+
+    #switcher, #switcher-list {
+        height: 50px;
+        top: 5px;
+        z-index: 2;
+        display: block;
+        margin: auto;
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+
+    #switcher {
+        width: 200px;
+
+    }
+
+    #switcher-list {
+        top: 50px;
+        width: 150px;
+
+    }
+
+    #inner-list {
+        display: block;
+        top: 90px;
+        margin: auto;
+        position: relative;
+        left: 0;
+        right: 0;
+        max-width: 400px;
+        height: calc(100% - 150px);
+        overflow: auto;
+    }
+
+    #inner-list img {
+        width: 40px;
+        float: left;
+        margin-right: 15px;
+    }
+
+    #btn-kort, #btn-list-dis {
+        float: left;
+        -webkit-border-bottom-left-radius: 5px;
+        -webkit-border-top-left-radius: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        -moz-border-radius-topleft: 5px;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
+    }
+
+    #btn-list, #btn-list-alpha {
+        float: right;
+        -webkit-border-bottom-right-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-bottomright: 5px;
+        -moz-border-radius-topright: 5px;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    #btn-kort, #btn-list {
+        width: 50%;
+        text-align: center;
+        background-color: rgba(224, 241, 251, 0.9);
+
+    }
+
+    #btn-list-dis, #btn-list-alpha {
+        width: 50%;
+        text-align: center;
+        background-color: rgba(241, 241, 241, 0.9);
+
+    }
+
+    .nav > li {
+        float: left !important;
+    }
+
+    #switcher .active {
+        background-color: #008ECF;
+        color: white;
+    }
+
+    #switcher-list .active {
+        background-color: #9e9e9e;
+        color: white;
+    }
+
+    #switcher-list .disabled {
+        color: white;
+        cursor: not-allowed;
+    }
+
+    #btn-list h3, #btn-kort h3 {
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding: 5px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    #btn-list-dis h3, #btn-list-alpha h3 {
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding: 3px;
+        font-size: 12px;
+        font-weight: 300;
+        cursor: pointer;
+    }
+
+    .naturpark-list-item {
+        font-weight: 300;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+        margin: 2px 0 0 0;
+        background-color: rgba(248, 248, 248, 1);
+    }
+
+    .naturpark-list-item div {
+        white-space: nowrap;
+    }
+
+    .navbar {
+        left: 0 !important;
+    }
+
+    .leaflet-control-locate {
+        margin-top: 8px;
+        margin-bottom: 8px;
+        box-shadow: none;
+    }
+
+    .btn-share {
+        margin: 5px !important;
+    }
+
+    .leaflet-right {
+        display: none !important;
+    }
+
+    .distance {
+        font-size: 80%;
+        vertical-align: middle;
+        line-height: 0;
+        margin-right: 10px;
+        color: #9e9e9e;
+    }
+
+    .btn-text {
+        margin-bottom: 7px;
+    }
+
+    .btn-text-dis {
+        margin-top: 7px;
+    }
+
+    .btn-text-alpha {
+        margin-top: 12px;
+    }
+
+    .carousel-caption {
+        padding: 0;
+        top: 10px;
+    }
+
+    .embed-responsive {
+        margin-top: 18px;
+    }
+
+
+
+    @media (max-width: 1199px) {
+        .leaflet-control-locate {
+            margin-top: 7px;
+            margin-bottom: 7px;
+        }
+
+
+    }
+
+    @media (min-width: 1200px) {
+        .navbar-toggle {
+            margin-top: 14px;
+        }
+
+    }
+
+
+
+
+    #main {
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+
+
+    .form-inline .form-control {
+      width: 50%;
+      margin-left: 80px;
+    }
+
+    .done {
+      color: red;
+      text-decoration: line-through;
+    }
+
+    .undone {
+      color: #61DAFB;
+    }
+
+    .icon {
+      margin: 6px 10px 6px 0;
+    }
+
+    .list-group .list-group-item {
+        padding: 3px 16px;
+    }
+
+    .inherit-size {
+        font-size: inherit;
+    }
+
+
+
+
+</style>
+
+<!-- map -->
+<div id="pane">
+
+    <div id="container">
+        <div id="switcher">
+            <div id="btn-kort" class="active"><h3>Kort</h3></div>
+            <div id="btn-list"><h3>List</h3></div>
+        </div>
+        <div id="map"></div>
+        <div id="list">
+            <div id="switcher-list">
+                <div id="btn-list-dis" class="active"><h3>Afstand</h3></div>
+                <div id="btn-list-alpha"><h3>A - Å</h3></div>
+            </div>
+            <div id="inner-list"></div>
+        </div>
+    </div>
+
+    <!-- Nav bar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" id="burger-btn">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="#">MapCentia</a>
+
+            </div>
+
+            <div class="collapse navbar-collapse">
+
+                <ul class="nav navbar-nav">
+                    <li><a href="javascript:void(0)" id="todo-btn"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="locale-btn"></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div id="info-modal" class="slide-left">
+        <div class="modal-header">
+            <button type="button" class="close" aria-hidden="true">×</button>
+            <h2 class="modal-title">sdsdsd</h2>
+        </div>
+        <div id="info-modal-body-wrapper">
+            <div class="modal-body">
+                            <div class="form-group" id="base-layer-list"></div>
+                            <div class="form-group" id="vectorlayers"></div>
+                        </div>
+            </div>
+        </div>
+
+
+    <div id="info-modal-top" class="slide-left">
+            <div class="modal-header">
+                <button type="button" class="close" aria-hidden="true">×</button>
+                <h2 class="modal-title">TOP</h2>
+            </div>
+            <div id="info-modal-top-body-wrapper">
+                <div class="modal-body">
+                        <div id="vectorlayer-table-div"><table id=vectorlayer-table"/></div>
+                </div>
+                </div>
+            </div>
+
+</div>
+
+
+
+
+
+<!-- About Modal -->
+<div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="about-modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="about-modalLabel">{{About}}</h4>
+            </div>
+            <div class="modal-body">
+                <p>Naturpark Lillebælt er Danmarks største naturpark. En marin naturpark med det strømmende bælt som kerne, omkranset af smukke kystnære landskaber. Her findes en af verdens tætteste bestande af hvaler – de små marsvin. Naturparken arbejder for, at vi sammen skaber et hav af oplevelser, som giver os lyst til at passe på og forbedre Lillebælt.</p>
+                <div class="embed-responsive embed-responsive-16by9">'
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/y4HjGB2oZNA" allowfullscreen></iframe>
+                </div>
+                <p><a href="http://www.naturparklillebaelt.dk" target="_blank">www.naturparklillebaelt.dk</a></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Close}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Todo List -->
+<div class="modal fade" id="todo-list-modal" tabindex="-1" role="dialog" aria-labelledby="about-modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="about-modalLabel">Det skal jeg se</h4>
+            </div>
+            <div class="modal-body">
+                <div id="app"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Close}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info Modal -->
+<div class="modal fade" id="click-modal" tabindex="-1" role="dialog" aria-labelledby="click-modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" id="click-modalLabel"></h2>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Close}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
