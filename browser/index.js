@@ -133,7 +133,7 @@ module.exports = module.exports = {
 
             features = store.geoJSON.features;
 
-            if ("geolocation" in navigator) {
+        /*    if ("geolocation" in navigator) {
 
                 navigator.geolocation.watchPosition(
                     function (p) {
@@ -156,7 +156,7 @@ module.exports = module.exports = {
 
                 parent.renderListWithoutDistance();
 
-            }
+            }*/
 
             $.each(store.geoJSON.features, function (i, v) {
 
