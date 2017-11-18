@@ -13,6 +13,11 @@ var backboneEvents;
 
 var highlights;
 
+var cloud;
+
+var setting;
+
+
 var jquery = require('jquery');
 require('snackbarjs');
 
@@ -24,10 +29,15 @@ require('snackbarjs');
 module.exports = {
     set: function (o) {
         backboneEvents = o.backboneEvents;
+        cloud = o.cloud;
+        setting = o.setting;
         highlights = o.extensions.highlights.index;
         return this;
     },
     init: function () {
+
+        var map = cloud.get().map;
+
         $("#btn-kort").on("click", function (e) {
             $("#map").fadeIn(200);
             $("#list").fadeOut(200);
@@ -68,6 +78,59 @@ module.exports = {
             }, 500)
         });
 
+
+        // Bottom dialog
+        $(".close-hide").on("click", function (e) {
+
+            var id = ($(this)).parent().parent().attr('id');
+
+            $("#" + id).animate({
+                bottom: "-100%"
+            }, 500, function () {
+                $(id + " .expand-less").show();
+                $(id + " .expand-more").hide();
+            });
+        });
+
+        $(".expand-less").on("click", function () {
+
+            var id = ($(this)).parent().parent().attr('id');
+
+            $("#" + id).animate({
+                bottom: (($("#" + id).height()*-1)+30) + "px"
+            }, 500, function () {
+                $("#" + id + " .expand-less").hide();
+                $("#" + id + " .expand-more").show();
+            });
+        });
+
+        $(".expand-more").on("click", function () {
+
+            var id = ($(this)).parent().parent().attr('id');
+
+            $("#" + id).animate({
+                bottom: "0"
+            }, 500, function () {
+                $("#" + id + " .expand-less").show();
+                $("#" + id + " .expand-more").hide();
+            });
+        });
+
+        $(".map-tool-btn").on("click", function (e) {
+
+            e.preventDefault();
+
+            var id = ($(this)).attr('href');
+
+            $(id).animate({
+                bottom: "0"
+            }, 500, function () {
+                $(id + " .expand-less").show();
+                $(id + " .expand-more").hide();
+            })
+        });
+
+
         $("#info-modal-top.slide-left .close").on("click", function () {
             $("#info-modal-top.slide-left").animate({
                 left: "-100%"
@@ -76,6 +139,18 @@ module.exports = {
 
         $("#todo-btn").on("click", function () {
             $("#todo-list-modal").modal({});
+        });
+
+        $("#zoom-in-btn").on("click", function () {
+            map.zoomIn();
+        });
+
+        $("#zoom-out-btn").on("click", function () {
+            map.zoomOut();
+        });
+
+        $("#zoom-default-btn").on("click", function () {
+            cloud.get().zoomToExtent(setting.getExtent());
         });
 
 

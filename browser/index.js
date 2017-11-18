@@ -50,7 +50,6 @@ var urlVars = urlparser.urlVars;
 var todoItems = [];
 
 var source1 =
-    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-fab-mini" data-todo-id="{{id}}"><i class="material-icons">directions</i></a>' +
     '<h1>{{{titel}}}</h1>' +
     '<div><b>{{{manchet}}}</b></div>' +
     '<div>{{{beskrivelse}}}</div>' +
@@ -94,6 +93,7 @@ var sourceShare =
     '<div style="text-align: center" class="bs-component btn-group-sm">' +
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="facebook" data-poi-id="{{id}}"><i class="material-icons fa fa-facebook"></i></a>' +
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="twitter" data-poi-id="{{id}}"><i class="material-icons fa fa-twitter"></i></a>' +
+    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-todo-id="{{id}}"><i class="material-icons">directions</i></a>'
     '</div>';
 
 var template1 = handlebars.compile(source1);
@@ -239,7 +239,9 @@ module.exports = module.exports = {
            vectorLayers.switchLayer(layerName, true);
         });
 
-        ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
+        try {
+            ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
+        } catch (e) {}
 
         $("#locale-btn").append($(".leaflet-control-locate"));
 
@@ -329,7 +331,9 @@ module.exports = module.exports = {
 
         todoItems.push({index: 3, value: featuresWithKeys[id].titel, done: false});
 
-        ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
+        try {
+            ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
+        } catch (e) {}
 
         return true;
     }

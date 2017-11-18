@@ -146,16 +146,17 @@
     }
 
     .leaflet-control-locate {
-        margin-top: 8px;
-        margin-bottom: 8px;
+        margin-top: 0;
+        margin-bottom: 0;
         box-shadow: none;
+        z-index: 0;
     }
 
     .btn-share {
         margin: 5px !important;
     }
 
-    .leaflet-right {
+    .leaflet-top.leaflet-right {
         display: none !important;
     }
 
@@ -188,14 +189,125 @@
         margin-top: 18px;
     }
 
+    #main {
+        margin: 0 auto;
+        text-align: left;
+    }
 
+    ul {
+        list-style: none;
+    }
 
-    @media (max-width: 1199px) {
-        .leaflet-control-locate {
-            margin-top: 7px;
-            margin-bottom: 7px;
+    .form-inline .form-control {
+        width: 50%;
+        margin-left: 80px;
+    }
+
+    .done {
+        color: red;
+        text-decoration: line-through;
+    }
+
+    .undone {
+        color: #61DAFB;
+    }
+
+    .icon {
+        margin: 6px 10px 6px 0;
+    }
+
+    .list-group-item {
+        padding: 9px 3px;
+
+        border: none;
+    }
+
+    .inherit-size {
+        font-size: inherit;
+    }
+
+    #floating-container-primary {
+        position: absolute;
+        top: 68px;
+        right: 8px;
+        width: 40px;
+    }
+
+    #floating-container-secondary {
+        position: absolute;
+        top: 235px;
+        right: 8px;
+        width: 40px;
+    }
+
+    #floating-container-secondary a {
+        margin-bottom: 8px;
+    }
+
+    #floating-container-primary a {
+        margin-bottom: 8px;
+    }
+
+    .leaflet-control-locate a, .leaflet-control-locate a:hover {
+        border-radius: 50% !important;
+        font-size: 24px;
+        height: 40px;
+        margin: auto;
+        min-width: 40px;
+        width: 40px;
+        padding: 0;
+        overflow: hidden;
+        -webkit-box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+        box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+        position: relative;
+        line-height: normal;
+        line-height: 40px
+    }
+
+    .btn.btn-fab btn-fab-mini, .btn.btn-fab btn-fab-mini.btn-primary, .btn:not(.btn-raised):not(.btn-link):hover {
+
+    }
+
+    .dialog-bottom {
+        padding: 14px 15px;
+        margin-bottom: 20px;
+        height: auto;
+
+        clear: both;
+        min-width: 288px;
+        max-width: 568px;
+
+        position: fixed;
+        right: 56px;
+        bottom: -100%;
+
+        box-shadow: 0 27px 24px 0 rgba(0, 0, 0, .2), 0 40px 77px 0 rgba(0, 0, 0, .22);
+        background-color: #fff;
+
+        border-radius: 2px;
+        max-height: 80%;
+
+    }
+    .dialog-bottom .modal-body {
+        max-height: 60vh;
+
+    }
+
+    .expand-more {
+        display: none;
+    }
+
+    @media (max-width: 767px) {
+        .dialog-bottom {
+            min-width: 100%;
+            border-radius: 0;
+            margin-bottom: 0;
+            right: 0;
         }
+        .dialog-bottom .modal-body {
+            max-height: 60vh;
 
+        }
 
     }
 
@@ -206,47 +318,22 @@
 
     }
 
+    @media (max-width: 1200px) {
 
+        #floating-container-primary {
+            top: 58px;
 
+        }
 
-    #main {
-      margin: 0 auto;
-      text-align: left;
+        #floating-container-secondary {
+            top: 225px;
+
+        }
     }
 
-    ul {
-      list-style: none;
+    .btn:not(.btn-raised):not(.btn-link):focus, .btn:not(.btn-raised):not(.btn-link):hover, .input-group-btn .btn:not(.btn-raised):not(.btn-link):focus, .input-group-btn .btn:not(.btn-raised):not(.btn-link):hover {
+        background-color: #EEEEEE;
     }
-
-
-
-    .form-inline .form-control {
-      width: 50%;
-      margin-left: 80px;
-    }
-
-    .done {
-      color: red;
-      text-decoration: line-through;
-    }
-
-    .undone {
-      color: #61DAFB;
-    }
-
-    .icon {
-      margin: 6px 10px 6px 0;
-    }
-
-    .list-group .list-group-item {
-        padding: 3px 16px;
-    }
-
-    .inherit-size {
-        font-size: inherit;
-    }
-
-
 
 
 </style>
@@ -267,6 +354,26 @@
             </div>
             <div id="inner-list"></div>
         </div>
+
+        <div id="floating-container-primary">
+            <a href="javascript:void(0)" id="zoom-in-btn" class="btn btn-default btn-fab btn-fab-mini"><i
+                    class="material-icons">add</i></a>
+            <a href="javascript:void(0)" id="zoom-default-btn" class="btn btn-default btn-fab btn-fab-mini"><i
+                    class="material-icons">home</i></a>
+            <a href="javascript:void(0)" id="zoom-out-btn" class="btn btn-default btn-fab btn-fab-mini"><i
+                    class="material-icons">remove</i></a>
+        </div>
+
+        <div id="floating-container-secondary">
+            <div id="locale-btn"></div>
+            <a href="javascript:void(0)" id="todo-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
+                    class="material-icons">directions</i></a>
+            <a href="#base-layers-dialog" id="base-layers-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
+                    class="material-icons">layers</i></a>
+            <a href="#print-dialog" id="print-dialog-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
+                    class="material-icons">print</i></a>
+        </div>
+
     </div>
 
     <!-- Nav bar -->
@@ -286,48 +393,150 @@
 
             <div class="collapse navbar-collapse">
 
-                <ul class="nav navbar-nav">
-                    <li><a href="javascript:void(0)" id="todo-btn"><i class="fa fa-shopping-basket" aria-hidden="true"></i></a></li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li id="locale-btn"></li>
-                </ul>
 
             </div>
         </div>
     </nav>
 
+    <div id="base-layers-dialog" class="dialog-bottom">
+        <div class="modal-header">
+            <button type="button" class="close close-hide" aria-hidden="true"><i class="material-icons">close</i></button>
+            <button type="button" class="close expand-more" aria-hidden="true"><i class="material-icons">expand_less</i></button>
+            <button type="button" class="close expand-less" aria-hidden="true"><i class="material-icons">expand_more</i></button>
+            <h3 class="modal-title">Korttype</h3>
+        </div>
+        <div class="form-group" id="base-layer-list"></div>
+    </div>
+
+    <div id="print-dialog" class="dialog-bottom">
+        <div class="modal-header">
+            <button type="button" class="close close-hide" aria-hidden="true"><i class="material-icons">close</i></button>
+            <button type="button" class="close expand-more" aria-hidden="true"><i class="material-icons">expand_less</i></button>
+            <button type="button" class="close expand-less" aria-hidden="true"><i class="material-icons">expand_more</i></button>
+            <h3 class="modal-title">Print</h3>
+        </div>
+        <div class="modal-body">
+            <div class="togglebutton">
+                <label>
+                    <input id="print-btn" type="checkbox"> {{Activate print tools}}
+                </label>
+            </div>
+            <div class="btn-toolbar bs-component" style="margin: 0;">
+                <div class="btn-group">
+                    <button id="start-print-btn" class="btn btn-raised" style="width: 130px"
+                            data-loading-text="<i class='fa fa-cog fa-spin fa-lg'></i> {{Make PDF}}
+                                                " disabled><i class='fa fa-cog fa-lg'></i> {{Make PDF}}
+                    </button>
+                </div>
+                <fieldset disabled id="get-print-fieldset">
+                    <div class="btn-group">
+                        <a target="_blank" href="javascript:void(0)" class="btn btn-primary btn-raised"
+                           id="open-pdf">{{Open PDF}}</a>
+                        <a href="bootstrap-elements.html" data-target="#"
+                           class="btn btn-primary btn-raised dropdown-toggle" data-toggle="dropdown"><span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0)" id="download-pdf">{{Download}}</a></li>
+                            <li><a target="_blank" href="javascript:void(0)" id="open-html">{{Open HTML page}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </fieldset>
+            </div>
+            <div>
+                <form class="form-horizontal" id="print-form" role="form" data-toggle="validator">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="select-scale" class="col-md-2 control-label">{{Scale}}</label>
+                            <div class="col-md-10">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                disabled>1: <span class="caret"></span></button>
+                                        <ul id="ul-scale" class="dropdown-menu dropdown-menu-right"></ul>
+                                    </div>
+                                    <input type="number" min="200" id="select-scale" class="form-control" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: none">
+                            <label class="col-md-2 control-label">{{Template}}</label>
+                            <div class="col-md-10" id="print-tmpl"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{Page size}}</label>
+                            <div class="col-md-10" id="print-size"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{{Orientation}}</label>
+                            <div class="col-md-10" id="print-orientation"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="print-title" class="col-md-2 control-label">{{Title}}</label>
+
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="print-title" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="print-comment" class="col-md-2 control-label">{{Comment}}</label>
+                            <div class="col-md-10">
+                                <textarea class="form-control" rows="3" id="print-comment" disabled></textarea>
+                                <span class="help-block">{{The comment will be placed on the PDF}}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="togglebutton">
+                                <label>
+                                    <input id="add-legend-btn" type="checkbox" disabled> {{Show legend on print}}
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <div id="info-modal" class="slide-left">
         <div class="modal-header">
             <button type="button" class="close" aria-hidden="true">×</button>
-            <h2 class="modal-title">Den Gode Tur</h2>
+            <h3 class="modal-title">Den Gode Tur</h3>
         </div>
         <div id="info-modal-body-wrapper">
             <div class="modal-body">
-                            <div class="form-group" id="base-layer-list"></div>
-                            <div class="form-group" id="vectorlayers"></div>
-                        </div>
+                <div class="form-group" id="vectorlayers"></div>
             </div>
         </div>
+    </div>
 
 
     <div id="info-modal-top" class="slide-left">
-            <div class="modal-header">
-                <button type="button" class="close" aria-hidden="true">×</button>
-                <h2 class="modal-title">Liste</h2>
-            </div>
-            <div id="info-modal-top-body-wrapper">
-                <div class="modal-body">
-                        <div id="vectorlayer-table-div"><table id=vectorlayer-table"/></div>
+        <div class="modal-header">
+            <button type="button" class="close" aria-hidden="true">×</button>
+            <h3 class="modal-title">Liste</h3>
+        </div>
+        <div id="info-modal-top-body-wrapper">
+            <div class="modal-body">
+                <div id="vectorlayer-table-div">
+                    <table id=vectorlayer-table"/>
                 </div>
-                </div>
             </div>
+        </div>
+    </div>
 
 </div>
 
 
-
+</div>
 
 
 <!-- About Modal -->
@@ -335,15 +544,21 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="about-modalLabel">{{About}}</h4>
             </div>
             <div class="modal-body">
-                <p>Naturpark Lillebælt er Danmarks største naturpark. En marin naturpark med det strømmende bælt som kerne, omkranset af smukke kystnære landskaber. Her findes en af verdens tætteste bestande af hvaler – de små marsvin. Naturparken arbejder for, at vi sammen skaber et hav af oplevelser, som giver os lyst til at passe på og forbedre Lillebælt.</p>
+                <p>Naturpark Lillebælt er Danmarks største naturpark. En marin naturpark med det strømmende bælt
+                    som kerne, omkranset af smukke kystnære landskaber. Her findes en af verdens tætteste
+                    bestande af hvaler – de små marsvin. Naturparken arbejder for, at vi sammen skaber et hav af
+                    oplevelser, som giver os lyst til at passe på og forbedre Lillebælt.</p>
                 <div class="embed-responsive embed-responsive-16by9">'
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/y4HjGB2oZNA" allowfullscreen></iframe>
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/y4HjGB2oZNA"
+                            allowfullscreen></iframe>
                 </div>
-                <p><a href="http://www.naturparklillebaelt.dk" target="_blank">www.naturparklillebaelt.dk</a></p>
+                <p><a href="http://www.naturparklillebaelt.dk" target="_blank">www.naturparklillebaelt.dk</a>
+                </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{Close}}</button>
@@ -357,7 +572,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="about-modalLabel">Det skal jeg se</h4>
             </div>
             <div class="modal-body">
@@ -375,8 +591,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h2 class="modal-title" id="click-modalLabel"></h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="click-modalLabel"></h2>
             </div>
             <div class="modal-body">
                 ...
