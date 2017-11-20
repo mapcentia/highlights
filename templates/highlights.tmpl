@@ -288,6 +288,7 @@
         max-height: 80%;
 
     }
+
     .dialog-bottom .modal-body {
         max-height: 60vh;
 
@@ -297,6 +298,14 @@
         display: none;
     }
 
+    .fixed-table-container {
+        height: calc(100vh - 100px) !important;
+    }
+
+    .list-group .list-group-item {
+        padding: 3px 16px;
+    }
+
     @media (max-width: 767px) {
         .dialog-bottom {
             min-width: 100%;
@@ -304,6 +313,7 @@
             margin-bottom: 0;
             right: 0;
         }
+
         .dialog-bottom .modal-body {
             max-height: 60vh;
 
@@ -366,9 +376,10 @@
 
         <div id="floating-container-secondary">
             <div id="locale-btn"></div>
-            <a href="javascript:void(0)" id="todo-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
+            <a href="#todo-list-dialog" id="todo-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
                     class="material-icons">directions</i></a>
-            <a href="#base-layers-dialog" id="base-layers-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
+            <a href="#base-layers-dialog" id="base-layers-btn"
+               class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
                     class="material-icons">layers</i></a>
             <a href="#print-dialog" id="print-dialog-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
                     class="material-icons">print</i></a>
@@ -400,19 +411,43 @@
 
     <div id="base-layers-dialog" class="dialog-bottom">
         <div class="modal-header">
-            <button type="button" class="close close-hide" aria-hidden="true"><i class="material-icons">close</i></button>
-            <button type="button" class="close expand-more" aria-hidden="true"><i class="material-icons">expand_less</i></button>
-            <button type="button" class="close expand-less" aria-hidden="true"><i class="material-icons">expand_more</i></button>
+            <button type="button" class="close close-hide" aria-hidden="true"><i class="material-icons">close</i>
+            </button>
+            <button type="button" class="close expand-more" aria-hidden="true"><i class="material-icons">expand_less</i>
+            </button>
+            <button type="button" class="close expand-less" aria-hidden="true"><i class="material-icons">expand_more</i>
+            </button>
             <h3 class="modal-title">Korttype</h3>
         </div>
-        <div class="form-group" id="base-layer-list"></div>
+        <div class="modal-body">
+            <div class="form-group" id="base-layer-list"></div>
+        </div>
+    </div>
+
+    <!-- Todo List -->
+    <div id="todo-list-dialog" class="dialog-bottom">
+        <div class="modal-header">
+            <button type="button" class="close close-hide" aria-hidden="true"><i class="material-icons">close</i>
+            </button>
+            <button type="button" class="close expand-more" aria-hidden="true"><i class="material-icons">expand_less</i>
+            </button>
+            <button type="button" class="close expand-less" aria-hidden="true"><i class="material-icons">expand_more</i>
+            </button>
+            <h3 class="modal-title">Det skal jeg se</h3>
+        </div>
+        <div class="modal-body">
+            <div id="app"></div>
+        </div>
     </div>
 
     <div id="print-dialog" class="dialog-bottom">
         <div class="modal-header">
-            <button type="button" class="close close-hide" aria-hidden="true"><i class="material-icons">close</i></button>
-            <button type="button" class="close expand-more" aria-hidden="true"><i class="material-icons">expand_less</i></button>
-            <button type="button" class="close expand-less" aria-hidden="true"><i class="material-icons">expand_more</i></button>
+            <button type="button" class="close close-hide" aria-hidden="true"><i class="material-icons">close</i>
+            </button>
+            <button type="button" class="close expand-more" aria-hidden="true"><i class="material-icons">expand_less</i>
+            </button>
+            <button type="button" class="close expand-less" aria-hidden="true"><i class="material-icons">expand_more</i>
+            </button>
             <h3 class="modal-title">Print</h3>
         </div>
         <div class="modal-body">
@@ -536,9 +571,6 @@
 </div>
 
 
-</div>
-
-
 <!-- About Modal -->
 <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="about-modalLabel">
     <div class="modal-dialog" role="document">
@@ -559,25 +591,6 @@
                 </div>
                 <p><a href="http://www.naturparklillebaelt.dk" target="_blank">www.naturparklillebaelt.dk</a>
                 </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{Close}}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Todo List -->
-<div class="modal fade" id="todo-list-modal" tabindex="-1" role="dialog" aria-labelledby="about-modalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="about-modalLabel">Det skal jeg se</h4>
-            </div>
-            <div class="modal-body">
-                <div id="app"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{Close}}</button>

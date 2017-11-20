@@ -39,6 +39,8 @@ var vectorLayers;
 
 var features = [];
 
+var tripLayer = L.geoJson(null);
+
 var React = require('react');
 
 var ReactDOM = require('react-dom');
@@ -50,26 +52,25 @@ var urlVars = urlparser.urlVars;
 var todoItems = [];
 
 var source1 =
-    '<h1>{{{titel}}}</h1>' +
-    '<div><b>{{{manchet}}}</b></div>' +
-    '<div>{{{beskrivelse}}}</div>' +
+    '<h1>{{{title}}}</h1>' +
+    '<div>{{{text}}}</div>' +
     '<div id="myCarousel" class="carousel slide" data-ride="carousel">' +
 
     '<ol class="carousel-indicators">' +
-    '{{#foto_karrusel}}' +
+    '{{#images}}' +
     '<li data-target="#myCarousel" data-slide-to="{{@index}}"  class="{{#if @first}}active{{/if}}"></li>' +
-    '{{/foto_karrusel}}' +
+    '{{/images}}' +
     '</ol>' +
 
     '<div class="carousel-inner" role="listbox">' +
-    '{{#foto_karrusel}}' +
+    '{{#images}}' +
     '<div class="item {{#if @first}}active{{/if}}">' +
     '<img style="width: 100%" src="{{.}}" alt="">' +
     '<div class="carousel-caption">' +
     '<p>{{[1]}}</p>' +
     '</div>' +
     '</div>' +
-    '{{/foto_karrusel}}' +
+    '{{/images}}' +
     '</div>' +
 
 
@@ -94,7 +95,7 @@ var sourceShare =
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="facebook" data-poi-id="{{id}}"><i class="material-icons fa fa-facebook"></i></a>' +
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="twitter" data-poi-id="{{id}}"><i class="material-icons fa fa-twitter"></i></a>' +
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-todo-id="{{id}}"><i class="material-icons">directions</i></a>'
-    '</div>';
+'</div>';
 
 var template1 = handlebars.compile(source1);
 
@@ -121,7 +122,9 @@ module.exports = module.exports = {
     },
     init: function () {
 
-        var parent = this, layerName = "v:_l_den_gode_tur.interessepunkter";
+        var parent = this, layerName = "v:punkter.poi";
+
+        cloud.get().map.addLayer(tripLayer);
 
         vectorLayers.setOnEachFeature(layerName, function (feature, layer) {
             layer.on("click", function () {
@@ -133,34 +136,35 @@ module.exports = module.exports = {
 
             features = store.geoJSON.features;
 
-        /*    if ("geolocation" in navigator) {
+            /*    if ("geolocation" in navigator) {
 
-                navigator.geolocation.watchPosition(
-                    function (p) {
-                        position = p;
-                        $("#btn-list-dis").removeClass("disabled");
-                        if ($("#btn-list-dis").hasClass("active")) {
-                            parent.renderListWithDistance();
-                        }
-                    },
+             navigator.geolocation.watchPosition(
+             function (p) {
+             position = p;
+             $("#btn-list-dis").removeClass("disabled");
+             if ($("#btn-list-dis").hasClass("active")) {
+             parent.renderListWithDistance();
+             }
+             },
 
-                    function () {
-                        parent.renderListWithoutDistance();
-                        $("#btn-list-alpha").addClass("active");
-                        $("#btn-list-dis").removeClass("active");
-                        $("#btn-list-dis").addClass("disabled");
-                    }
-                );
+             function () {
+             parent.renderListWithoutDistance();
+             $("#btn-list-alpha").addClass("active");
+             $("#btn-list-dis").removeClass("active");
+             $("#btn-list-dis").addClass("disabled");
+             }
+             );
 
-            } else {
+             } else {
 
-                parent.renderListWithoutDistance();
+             parent.renderListWithoutDistance();
 
-            }*/
+             }*/
 
             $.each(store.geoJSON.features, function (i, v) {
 
                 featuresWithKeys[v.properties.id] = v.properties;
+                featuresWithKeys[v.properties.id].geometry = v.geometry;
 
             });
 
@@ -219,13 +223,12 @@ module.exports = module.exports = {
                         icon: 'fa-eye',
                         //number: 'V',
                         markerColor: 'green-light',
-                        shape: 'star',
-                        // shape: feature.properties.tid === "Vikingetid" ? 'star' :
-                        //     feature.properties.tid === "Stenalder" ? 'square' :
-                        //         feature.properties.tid === "Middelalder" ? 'penta' :
-                        //             feature.properties.tid === "Jernalder" ? 'circle' :
-                        //                 'circle'
-                        // ,
+                        shape: feature.properties.tid === "Vikingetid" ? 'star' :
+                            feature.properties.tid === "Stenalder" ? 'square' :
+                                feature.properties.tid === "Middelalder" ? 'penta' :
+                                    feature.properties.tid === "Jernalder" ? 'circle' :
+                                        'circle'
+                        ,
                         prefix: 'fa',
                         iconColor: "#ffffff",
                         //innerHTML: '<svg width="20" height="30"> <circle cx="10" cy="15" r="10" stroke="green" stroke-width="1" fill="yellow" /> </svg>'
@@ -236,12 +239,13 @@ module.exports = module.exports = {
         );
 
         backboneEvents.get().on("ready:vectorLayers", function () {
-           vectorLayers.switchLayer(layerName, true);
+            vectorLayers.switchLayer(layerName, true);
         });
 
         try {
             ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
-        } catch (e) {}
+        } catch (e) {
+        }
 
         $("#locale-btn").append($(".leaflet-control-locate"));
 
@@ -249,9 +253,9 @@ module.exports = module.exports = {
 
     createInfoContent: function (id) {
 
-        //featuresWithKeys[id].text1 = converter.makeHtml(featuresWithKeys[id].tekst);
-        //featuresWithKeys[id].title = featuresWithKeys[id].titel;
-        //featuresWithKeys[id].images = featuresWithKeys[id].billeder;
+        featuresWithKeys[id].text = converter.makeHtml(featuresWithKeys[id].tekst);
+        featuresWithKeys[id].title = featuresWithKeys[id].titel;
+        featuresWithKeys[id].images = featuresWithKeys[id].billeder;
 
         var html = template1(featuresWithKeys[id]);
 
@@ -323,35 +327,138 @@ module.exports = module.exports = {
             <FeatureList features={features}/>,
             document.getElementById("inner-list")
         );
-
-
     },
 
     updateTodo: function (id, add) {
 
-        todoItems.push({index: 3, value: featuresWithKeys[id].titel, done: false});
+        todoItems.push({
+            index: 3,
+            value: featuresWithKeys[id].titel,
+            done: false,
+            geometry: featuresWithKeys[id].geometry
+        });
+
+        createOsrmTripUrl(todoItems)
+
+            .then(
+                function (res) {
+                    return addTripLayer(res.url);
+                },
+                function () {
+                    console.log(res);
+                })
+
+            .then(
+                function (res) {
+                    console.log(res);
+                },
+                function () {
+                    console.log(res);
+                });
 
         try {
             ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
-        } catch (e) {}
+        } catch (e) {
+        }
 
         return true;
     }
 };
 
-/*
- Todo app structure
-
- TodoApp
- - TodoHeader
- - TodoList
- - TodoListItem #1
- - TodoListItem #2
- ...
- - TodoListItem #N
- - TodoForm
+/**
+ * Builds a OSRM Trip URL from array array of GeoJSON point geometries
+ * First point is the geolocation
+ * @param arr
+ * @returns {Promise}
  */
+var createOsrmTripUrl = function (arr) {
 
+    return new Promise(function (resolve, reject) {
+
+        var coords = arr.map(function (e) {
+            return e.geometry.coordinates[0] + "," + e.geometry.coordinates[1];
+        });
+
+        if ("geolocation" in navigator) {
+
+            navigator.geolocation.getCurrentPosition(
+                function (pos) {
+                    var crd = pos.coords;
+
+                    console.log('Your current position is:');
+                    console.log(`Latitude : ${crd.latitude}`);
+                    console.log(`Longitude: ${crd.longitude}`);
+                    console.log(`More or less ${crd.accuracy} meters.`);
+
+                    coords.unshift(crd.longitude + "," + crd.latitude);
+
+                    if (coords.length > 1) {
+                        resolve(
+                            {
+                                url: "https://router.project-osrm.org/trip/v1/driving/" + coords.join(";") + "?overview=simplified&steps=false&hints=;&geometries=geojson",
+                                success: true
+                            })
+                    } else {
+                        reject({
+                            code: 1,
+                            message: "Less than two points"
+                        });
+                    }
+                },
+
+                function () {
+                    reject({
+                        code: 2,
+                        message: "ERROR"
+                    });
+                },
+
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                },
+            );
+
+        } else {
+
+
+        }
+    })
+};
+
+/**
+ * Fetches the GeoJSON from OSRM and add it to Leaflet
+ * @param url
+ * @returns {Promise}
+ */
+var addTripLayer = function (url) {
+
+    return new Promise(function (resolve, reject) {
+
+        if (!url) {
+            reject({
+                message: "No URL"
+            });
+        }
+
+        $.getJSON(url, function (data) {
+
+            tripLayer.clearLayers();
+            tripLayer.addData(data.trips[0].geometry);
+            resolve({
+                message: "Trip added to map"
+            })
+
+
+        }).fail(function () {
+            reject({
+                message: "Trip NOT added to map"
+            });
+
+        })
+    })
+};
 
 class TodoList extends React.Component {
     render() {
@@ -399,39 +506,11 @@ class TodoListItem extends React.Component {
     }
 }
 
-class TodoForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.onSubmit = this.onSubmit.bind(this);
-    }
-
-    componentDidMount() {
-        this.refs.itemName.focus();
-    }
-
-    onSubmit(event) {
-        event.preventDefault();
-        var newItemValue = this.refs.itemName.value;
-
-        if (newItemValue) {
-            this.props.addItem({newItemValue});
-            this.refs.form.reset();
-        }
-    }
-
-    render() {
-        return (
-            <form ref="form" onSubmit={this.onSubmit} className="form-inline">
-                <input type="text" ref="itemName" className="form-control" placeholder="add a new todo..."/>
-                <button type="submit" className="btn btn-default">Add</button>
-            </form>
-        );
-    }
-}
-
 class TodoHeader extends React.Component {
     render() {
-        return <p>Hvis du er interesseret i at besøge en seværdig, så klik i info-vinduet på <i className="material-icons inherit-size">directions</i> knappen. Så kommer seværdigen på listen. Kortet vil foreslå en rute du kan tage rundt til de forskellige seværdiger. God tur!</p>
+        return <p>Hvis du er interesseret i at besøge en seværdig, så klik i info-vinduet på <i
+            className="material-icons inherit-size">directions</i> knappen. Så kommer seværdigen på listen. Kortet vil
+            foreslå en rute du kan tage rundt til de forskellige seværdiger. God tur!</p>
     }
 }
 
@@ -456,6 +535,30 @@ class TodoApp extends React.Component {
     removeItem(itemIndex) {
         todoItems.splice(itemIndex, 1);
         this.setState({todoItems: todoItems});
+
+        createOsrmTripUrl(this.state.todoItems)
+
+            .then(
+                function (res) {
+                    console.log(res);
+                    return addTripLayer(res.url);
+                },
+                function (res) {
+                    console.log(res);
+                    if (res.code === 1) {
+                        tripLayer.clearLayers();
+                    }
+                    return;
+                }
+            )
+
+            .then(
+                function (res) {
+                    console.log(res);
+                },
+                function (res) {
+                    console.log(res);
+                });
     }
 
     markTodoDone(itemIndex) {
