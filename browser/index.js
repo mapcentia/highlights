@@ -39,7 +39,12 @@ var vectorLayers;
 
 var features = [];
 
-var tripLayer = L.geoJson(null);
+var tripLayer = L.geoJson(null, {
+    color: '#f03',
+    opacity: 0.2
+});
+
+var highLightLayer = new L.FeatureGroup();
 
 var React = require('react');
 
@@ -50,6 +55,8 @@ var urlparser = require('./../../../browser/modules/urlparser');
 var urlVars = urlparser.urlVars;
 
 var todoItems = [];
+
+var googleUrl;
 
 var source1 =
     '<h1>{{{title}}}</h1>' +
@@ -65,7 +72,7 @@ var source1 =
     '<div class="carousel-inner" role="listbox">' +
     '{{#images}}' +
     '<div class="item {{#if @first}}active{{/if}}">' +
-    '<img style="width: 100%" src="{{.}}" alt="">' +
+    '<img style="width: 100%" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/{{.}}" alt="">' +
     '<div class="carousel-caption">' +
     '<p>{{[1]}}</p>' +
     '</div>' +
@@ -125,6 +132,7 @@ module.exports = module.exports = {
         var parent = this, layerName = "v:punkter.poi";
 
         cloud.get().map.addLayer(tripLayer);
+        cloud.get().map.addLayer(highLightLayer);
 
         vectorLayers.setOnEachFeature(layerName, function (feature, layer) {
             layer.on("click", function () {
@@ -222,7 +230,7 @@ module.exports = module.exports = {
                     icon: L.ExtraMarkers.icon({
                         icon: 'fa-eye',
                         //number: 'V',
-                        markerColor: 'green-light',
+                        markerColor: 'red',
                         shape: feature.properties.tid === "Vikingetid" ? 'star' :
                             feature.properties.tid === "Stenalder" ? 'square' :
                                 feature.properties.tid === "Middelalder" ? 'penta' :
@@ -230,7 +238,7 @@ module.exports = module.exports = {
                                         'circle'
                         ,
                         prefix: 'fa',
-                        iconColor: "#ffffff",
+                        iconColor: "#fff",
                         //innerHTML: '<svg width="20" height="30"> <circle cx="10" cy="15" r="10" stroke="green" stroke-width="1" fill="yellow" /> </svg>'
 
                     })
@@ -373,17 +381,57 @@ module.exports = module.exports = {
  */
 var createOsrmTripUrl = function (arr) {
 
+    console.log(arr);
+
+    tripLayer.clearLayers();
+    highLightLayer.clearLayers();
+
     return new Promise(function (resolve, reject) {
 
+
         var coords = arr.map(function (e) {
+
+            var color = e.done ? "#00ff33" : "#ff0033";
+            L.circleMarker([e.geometry.coordinates[1], e.geometry.coordinates[0]], {
+                fillColor: color,
+                fillOpacity: 0.2,
+                stroke: false,
+                radius: 20,
+            }).addTo(highLightLayer);
+
+            L.circleMarker([e.geometry.coordinates[1], e.geometry.coordinates[0]], {
+                fillColor: color,
+                fillOpacity: 0.4,
+                stroke: false,
+                radius: 10,
+            }).addTo(highLightLayer);
+
+
             return e.geometry.coordinates[0] + "," + e.geometry.coordinates[1];
         });
+
+        var coordsR = arr.map(function (e) {
+
+            return e.geometry.coordinates[1] + "," + e.geometry.coordinates[0];
+
+        });
+
 
         if ("geolocation" in navigator) {
 
             navigator.geolocation.getCurrentPosition(
                 function (pos) {
                     var crd = pos.coords;
+
+                    // Add home marker
+                    L.marker([crd.latitude, crd.longitude], {
+                        icon: L.AwesomeMarkers.icon({
+                                icon: 'home',
+                                markerColor: '#C31919',
+                                prefix: 'fa'
+                            }
+                        )
+                    }).addTo(tripLayer);
 
                     console.log('Your current position is:');
                     console.log(`Latitude : ${crd.latitude}`);
@@ -393,6 +441,11 @@ var createOsrmTripUrl = function (arr) {
                     coords.unshift(crd.longitude + "," + crd.latitude);
 
                     if (coords.length > 1) {
+
+                        googleUrl = "https://www.google.com/maps/dir/?api=1&origin=" + crd.latitude + "," + crd.longitude + "&destination=" + crd.latitude + "," + crd.longitude + "&waypoints=" + coordsR.join("|");
+
+                        console.log(googleUrl);
+
                         resolve(
                             {
                                 url: "https://router.project-osrm.org/trip/v1/driving/" + coords.join(";") + "?overview=simplified&steps=false&hints=;&geometries=geojson",
@@ -444,7 +497,6 @@ var addTripLayer = function (url) {
 
         $.getJSON(url, function (data) {
 
-            tripLayer.clearLayers();
             tripLayer.addData(data.trips[0].geometry);
             resolve({
                 message: "Trip added to map"
@@ -514,6 +566,49 @@ class TodoHeader extends React.Component {
     }
 }
 
+class TodoUpdateRouteBtn extends React.Component {
+    constructor(props) {
+        super(props);
+        this.fullWidth = {
+            width: "100%"
+        };
+    }
+
+    render() {
+        return <button className="btn" style={this.fullWidth} onClick={function () {
+            createOsrmTripUrl(todoItems)
+
+                .then(
+                    function (res) {
+                        console.log(res);
+                        return addTripLayer(res.url);
+                    },
+                    function (res) {
+                        console.log(res);
+                        if (res.code === 1) {
+                            tripLayer.clearLayers();
+                        }
+                        return;
+                    }
+                )
+
+                .then(
+                    function (res) {
+                        console.log(res);
+                    },
+                    function (res) {
+                        console.log(res);
+                    });
+        }}>Opdaterer den foreslået rute</button>
+    }
+}
+
+class TodoGoogleLink extends React.Component {
+    render() {
+        return <a target="_blank" href={googleUrl}>Google Maps</a>
+    }
+}
+
 class TodoApp extends React.Component {
     constructor(props) {
         super(props);
@@ -567,13 +662,39 @@ class TodoApp extends React.Component {
         todo.done = !todo.done;
         todo.done ? todoItems.push(todo) : todoItems.unshift(todo);
         this.setState({todoItems: todoItems});
+
+        createOsrmTripUrl(this.state.todoItems)
+
+            .then(
+                function (res) {
+                    console.log(res);
+                    return addTripLayer(res.url);
+                },
+                function (res) {
+                    console.log(res);
+                    if (res.code === 1) {
+                        tripLayer.clearLayers();
+                    }
+                    return;
+                }
+            )
+
+            .then(
+                function (res) {
+                    console.log(res);
+                },
+                function (res) {
+                    console.log(res);
+                });
     }
 
     render() {
         return (
             <div id="main">
-                <TodoHeader />
+                <TodoHeader/>
+                <TodoUpdateRouteBtn/>
                 <TodoList items={this.props.initItems} removeItem={this.removeItem} markTodoDone={this.markTodoDone}/>
+                <TodoGoogleLink/>
             </div>
         );
     }
