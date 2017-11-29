@@ -40,8 +40,8 @@ var vectorLayers;
 var features = [];
 
 var tripLayer = L.geoJson(null, {
-    color: '#f03',
-    opacity: 0.2
+    color: '#888888',
+    opacity: 0.5
 });
 
 var highLightLayer = new L.FeatureGroup();
@@ -74,7 +74,7 @@ var source1 =
     '<div class="item {{#if @first}}active{{/if}}">' +
     '<img style="width: 100%" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/{{.}}" alt="">' +
     '<div class="carousel-caption">' +
-    '<p>{{[1]}}</p>' +
+    //'<p>{{[1]}}</p>' +
     '</div>' +
     '</div>' +
     '{{/images}}' +
@@ -93,7 +93,7 @@ var source1 =
 
     '{{#if video}}' +
     '<div class="embed-responsive embed-responsive-16by9">' +
-    '<iframe class="embed-responsive-item" src="{{video}}" allowfullscreen></iframe>' +
+    '<iframe class="embed-responsive-item" src="{{video}}?rel=0&modestbranding=1&fs=0&autohide=1&showinfo=0&wmode=transparent" allowfullscreen></iframe>' +
     '</div>' +
     '{{/if}}';
 
