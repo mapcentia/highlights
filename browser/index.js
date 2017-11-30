@@ -570,7 +570,7 @@ class TodoUpdateRouteBtn extends React.Component {
     }
 
     render() {
-        return <button className="btn" style={this.fullWidth} onClick={function () {
+        return <button className="btn btn-raised btn-default" style={this.fullWidth} onClick={function () {
             createOsrmTripUrl(todoItems)
 
                 .then(
