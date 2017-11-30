@@ -206,11 +206,6 @@ module.exports = module.exports = {
                     header: "Titel",
                     dataIndex: "titel",
                     sortable: true
-                },
-                {
-                    header: "Info",
-                    dataIndex: "kort_detaljetekst",
-                    sortable: true
                 }
             ]
         );
