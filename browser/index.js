@@ -58,10 +58,20 @@ var todoItems = [];
 
 var googleUrl;
 
+handlebars.registerHelper('checklength', function (v1, v2, options) {
+    'use strict';
+    if (v1.length > v2) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});
+
 var source1 =
     '<h1>{{{title}}}</h1>' +
     '<div>{{{text}}}</div>' +
     '<div id="myCarousel" class="carousel slide" data-ride="carousel">' +
+
+    '{{#checklength images 1}}' +
 
     '<ol class="carousel-indicators">' +
     '{{#images}}' +
@@ -79,8 +89,6 @@ var source1 =
     '</div>' +
     '{{/images}}' +
     '</div>' +
-
-
     '<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">' +
     '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>' +
     '<span class="sr-only">Previous</span>' +
@@ -90,6 +98,11 @@ var source1 =
     '<span class="sr-only">Next</span>' +
     '</a>' +
     '</div>' +
+
+    '{{else}}' +
+    '<img style="width: 100%" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/{{images.[0]}}" alt="">' +
+
+    '{{/checklength}}' +
 
     '{{#if video}}' +
     '<div class="embed-responsive embed-responsive-16by9">' +
