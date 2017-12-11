@@ -159,7 +159,7 @@ module.exports = {
             $(this).on("click", function (e) {
                 var site = $(this).data('some-site'),
                     id = $(this).data('poi-id'),
-                    hashTag = "#naturparklillebælt",
+                    hashTag = "#vmus",
                     url = removeParam("poi", window.location.href).replace("?", "") + "?poi=" + id;
 
                 switch (site) {
@@ -167,6 +167,7 @@ module.exports = {
                         window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url) + "&t=" + hashTag, '_blank', 'location=yes,height=300,width=520,scrollbars=yes,status=yes');
                         break;
                     case "twitter":
+                        console.log(encodeURIComponent(url) + "&text=" + hashTag);
                         window.open("https://twitter.com/share?url=" + encodeURIComponent(url) + "&text=" + hashTag, '_blank', 'location=yes,height=300,width=520,scrollbars=yes,status=yes');
                         break;
                 }

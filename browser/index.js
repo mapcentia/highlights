@@ -111,11 +111,20 @@ var source1 =
     '{{/if}}';
 
 var sourceShare =
-    '<div style="text-align: center" class="bs-component btn-group-sm">' +
+    '<div id="share-buttons" style="text-align: center" class="bs-component btn-group-sm">' +
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="facebook" data-poi-id="{{id}}"><i class="material-icons fa fa-facebook"></i></a>' +
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="twitter" data-poi-id="{{id}}"><i class="material-icons fa fa-twitter"></i></a>' +
-    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-todo-id="{{id}}"><i class="material-icons">directions</i></a>'
-'</div>';
+    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-todo-id="{{id}}"><i class="material-icons">directions</i></a>' +
+    '</div>' +
+
+    '<script>' +
+    'window.disqus_config = function () {' +
+    'this.page.url = "https://vidi.mapcentia.com/app/vmus?poi={{id}}";' +
+    'this.page.identifier = "{{id}}"' +
+    '};' +
+    '</script>' +
+
+    '<div id="disqus_thread"></div>';
 
 var template1 = handlebars.compile(source1);
 
@@ -157,37 +166,23 @@ module.exports = module.exports = {
 
             features = store.geoJSON.features;
 
-            /*    if ("geolocation" in navigator) {
-
-             navigator.geolocation.watchPosition(
-             function (p) {
-             position = p;
-             $("#btn-list-dis").removeClass("disabled");
-             if ($("#btn-list-dis").hasClass("active")) {
-             parent.renderListWithDistance();
-             }
-             },
-
-             function () {
-             parent.renderListWithoutDistance();
-             $("#btn-list-alpha").addClass("active");
-             $("#btn-list-dis").removeClass("active");
-             $("#btn-list-dis").addClass("disabled");
-             }
-             );
-
-             } else {
-
-             parent.renderListWithoutDistance();
-
-             }*/
-
             $.each(store.geoJSON.features, function (i, v) {
 
                 featuresWithKeys[v.properties.id] = v.properties;
                 featuresWithKeys[v.properties.id].geometry = v.geometry;
 
             });
+
+            // Open POI if any
+            if (urlVars.poi !== undefined) {
+
+                var parr = urlVars.poi.split("#");
+                if (parr.length > 1) {
+                    parr.pop();
+                }
+
+                parent.createInfoContent(parr.join());
+            }
 
         });
 
@@ -236,19 +231,19 @@ module.exports = module.exports = {
 
                 return L.marker(latlng, {
                     icon: L.ExtraMarkers.icon({
-                        icon: 'fa-eye',
+                        icon: feature.properties.icon === 1 ? 'fa-eye' :
+                            feature.properties.icon === 2 ? 'fa-eye' :
+                                feature.properties.icon === 3 ? 'fa-book' : 'fa-question',
                         //number: 'V',
                         markerColor: 'red',
-                        shape: feature.properties.tid === "Vikingetid" ? 'star' :
-                            feature.properties.tid === "Stenalder" ? 'square' :
-                                feature.properties.tid === "Middelalder" ? 'penta' :
-                                    feature.properties.tid === "Jernalder" ? 'circle' :
-                                        'circle'
+                        shape: feature.properties.icon === 1 ? 'star' :
+                            feature.properties.icon === 2 ? 'circle' :
+                                feature.properties.icon === 3 ? 'square' : 'circle'
+
                         ,
                         prefix: 'fa',
                         iconColor: "#fff",
                         //innerHTML: '<svg width="20" height="30"> <circle cx="10" cy="15" r="10" stroke="green" stroke-width="1" fill="yellow" /> </svg>'
-
                     })
                 });
             }
@@ -280,6 +275,31 @@ module.exports = module.exports = {
         $("#click-modal").modal({});
         $("#click-modalLabel").html(featuresWithKeys[id].navn);
         $("#click-modal .modal-body").html(html + htmlShare);
+
+
+        if (typeof DISQUS === "undefined") {
+            var d = document, s = d.createElement("script");
+            s.src = "https://vidi-mapcentia-com.disqus.com/embed.js";
+            s.setAttribute("data-timestamp", +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+
+        (function poll() {
+            if (typeof DISQUS !== "undefined") {
+                DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                        this.page.identifier = ""+id;
+                        this.page.url = "https://vidi.mapcentia.com/app/vmus?poi=" + id;
+                    }
+                });
+            } else {
+                setTimeout(function () {
+                    poll();
+                }, 100)
+            }
+
+        })();
     },
 
     renderListWithDistance: function () {
@@ -346,7 +366,6 @@ module.exports = module.exports = {
     },
 
     updateTodo: function (id, add) {
-
         todoItems.push({
             index: 3,
             value: featuresWithKeys[id].titel,
