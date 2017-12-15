@@ -130,13 +130,6 @@ var template1 = handlebars.compile(source1);
 
 var templateShare = handlebars.compile(sourceShare);
 
-var icon = L.icon({
-    iconUrl: 'https://s3-eu-west-1.amazonaws.com/mapcentia-www/naturpark_lillebaelt/leaflet-icons/Krone-piktogram.png',
-    iconSize: [40, 40], // size of the icon
-    iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-    popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
-});
-
 /**
  *
  * @type {{set: module.exports.set, init: module.exports.init}}
