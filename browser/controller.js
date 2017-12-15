@@ -39,7 +39,7 @@ module.exports = {
         var map = cloud.get().map;
 
         $("#btn-about").on("click", function (e) {
-            $("#click-about").modal({});
+            $("#about-modal").modal({});
 
         });
 
