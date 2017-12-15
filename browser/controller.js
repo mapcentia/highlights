@@ -39,7 +39,8 @@ module.exports = {
         var map = cloud.get().map;
 
         $("#btn-about").on("click", function (e) {
-            $("#about-modal").modal({});
+            $("#click-about").modal({});
+
         });
 
         $("#btn-kort").on("click", function (e) {
@@ -118,6 +119,20 @@ module.exports = {
                 $("#" + id + " .expand-less").show();
                 $("#" + id + " .expand-more").hide();
             });
+        });
+
+        $(".map-tool-btn").on("click", function (e) {
+
+            e.preventDefault();
+
+            var id = ($(this)).attr('href');
+
+            $(id).animate({
+                bottom: "0"
+            }, 500, function () {
+                $(id + " .expand-less").show();
+                $(id + " .expand-more").hide();
+            })
         });
 
 
