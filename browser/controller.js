@@ -38,11 +38,6 @@ module.exports = {
 
         var map = cloud.get().map;
 
-        $("#btn-about").on("click", function (e) {
-            $("#about-modal").modal({});
-
-        });
-
         $("#btn-kort").on("click", function (e) {
             $("#map").fadeIn(200);
             $("#list").fadeOut(200);
