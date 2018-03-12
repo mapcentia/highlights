@@ -144,107 +144,111 @@ module.exports = module.exports = {
     },
     init: function () {
 
-        var parent = this, layerName = "v:punkter.poi";
+        var parent = this, layerNames = ["v:punkter.poi", "v:punkter.natur"];
 
         cloud.get().map.addLayer(tripLayer);
         cloud.get().map.addLayer(highLightLayer);
 
-        vectorLayers.setOnEachFeature(layerName, function (feature, layer) {
-            layer.on("click", function () {
-                parent.createInfoContent(feature.properties.id);
-            });
-        });
-
-        vectorLayers.setOnLoad(layerName, function (store) {
-
-            features = store.geoJSON.features;
-
-            $.each(store.geoJSON.features, function (i, v) {
-
-                featuresWithKeys[v.properties.id] = v.properties;
-                featuresWithKeys[v.properties.id].geometry = v.geometry;
-
-            });
-
-            // Open POI if any
-            if (urlVars.poi !== undefined) {
-
-                var parr = urlVars.poi.split("#");
-                if (parr.length > 1) {
-                    parr.pop();
-                }
-
-                parent.createInfoContent(parr.join());
-            }
-
-        });
-
-        vectorLayers.setOnSelect(layerName, function (id, layer) {
-
-            parent.createInfoContent(layer.feature.properties.id);
-
-        });
-
-        vectorLayers.setOnMouseOver(layerName, _.debounce(function (id, layer) {
-
-            var p = new R.Pulse(
-                [layer.feature.geometry.coordinates[1], layer.feature.geometry.coordinates[0]],
-                30,
-                {'stroke': 'none', 'fill': 'none'},
-                {'stroke': '#30a3ec', 'stroke-width': 3});
-
-            cloud.get().map.addLayer(p);
-
-            setTimeout(function () {
-                cloud.get().map.removeLayer(p);
-            }, 800);
-
-        }, 250));
-
-        vectorLayers.setCM(layerName,
-            [
-                {
-                    header: "Titel",
-                    dataIndex: "titel",
-                    sortable: true
-                }
-            ]
-        );
-
-        vectorLayers.setStyle(layerName,
-            {
-                weight: 5,
-                color: '#ff00ff',
-                dashArray: '',
-                fillOpacity: 0.2
-            }
-        );
-
-        vectorLayers.setPointToLayer(layerName, function (feature, latlng) {
-
-                return L.marker(latlng, {
-                    icon: L.ExtraMarkers.icon({
-                        icon: feature.properties.icon === 1 ? 'fa-eye' :
-                            feature.properties.icon === 2 ? 'fa-eye' :
-                                feature.properties.icon === 3 ? 'fa-book' : 'fa-question',
-                        //number: 'V',
-                        markerColor: 'red',
-                        shape: feature.properties.icon === 1 ? 'star' :
-                            feature.properties.icon === 2 ? 'circle' :
-                                feature.properties.icon === 3 ? 'square' : 'circle'
-
-                        ,
-                        prefix: 'fa',
-                        iconColor: "#fff",
-                        //innerHTML: '<svg width="20" height="30"> <circle cx="10" cy="15" r="10" stroke="green" stroke-width="1" fill="yellow" /> </svg>'
-                    })
+        layerNames.map(function (layerName) {
+            vectorLayers.setOnEachFeature(layerName, function (feature, layer) {
+                layer.on("click", function () {
+                    parent.createInfoContent(feature.properties.id);
                 });
-            }
-        );
+            });
 
-        backboneEvents.get().on("ready:vectorLayers", function () {
-            vectorLayers.switchLayer(layerName, true);
+            vectorLayers.setOnLoad(layerName, function (store) {
+
+                features = store.geoJSON.features;
+
+                $.each(store.geoJSON.features, function (i, v) {
+
+                    featuresWithKeys[v.properties.id] = v.properties;
+                    featuresWithKeys[v.properties.id].geometry = v.geometry;
+
+                });
+
+                // Open POI if any
+                if (urlVars.poi !== undefined) {
+
+                    var parr = urlVars.poi.split("#");
+                    if (parr.length > 1) {
+                        parr.pop();
+                    }
+
+                    parent.createInfoContent(parr.join());
+                }
+
+            });
+
+            vectorLayers.setOnSelect(layerName, function (id, layer) {
+
+                parent.createInfoContent(layer.feature.properties.id);
+
+            });
+
+            vectorLayers.setOnMouseOver(layerName, _.debounce(function (id, layer) {
+
+                var p = new R.Pulse(
+                    [layer.feature.geometry.coordinates[1], layer.feature.geometry.coordinates[0]],
+                    30,
+                    {'stroke': 'none', 'fill': 'none'},
+                    {'stroke': '#30a3ec', 'stroke-width': 3});
+
+                cloud.get().map.addLayer(p);
+
+                setTimeout(function () {
+                    cloud.get().map.removeLayer(p);
+                }, 800);
+
+            }, 250));
+
+            vectorLayers.setCM(layerName,
+                [
+                    {
+                        header: "Titel",
+                        dataIndex: "titel",
+                        sortable: true
+                    }
+                ]
+            );
+
+            vectorLayers.setStyle(layerName,
+                {
+                    weight: 5,
+                    color: '#ff00ff',
+                    dashArray: '',
+                    fillOpacity: 0.2
+                }
+            );
+
+            vectorLayers.setPointToLayer(layerName, function (feature, latlng) {
+
+                    return L.marker(latlng, {
+                        icon: L.ExtraMarkers.icon({
+                            icon: feature.properties.icon === 1 ? 'fa-eye' :
+                                feature.properties.icon === 2 ? 'fa-eye' :
+                                    feature.properties.icon === 3 ? 'fa-book' : 'fa-question',
+                            //number: 'V',
+                            markerColor: layerName === "v:punkter.poi" ? 'red' :
+                                layerName === "v:punkter.natur" ? 'green' : 'black',
+                            shape: feature.properties.icon === 1 ? 'star' :
+                                feature.properties.icon === 2 ? 'circle' :
+                                    feature.properties.icon === 3 ? 'square' : 'circle'
+
+                            ,
+                            prefix: 'fa',
+                            iconColor: "#fff",
+                            //innerHTML: '<svg width="20" height="30"> <circle cx="10" cy="15" r="10" stroke="green" stroke-width="1" fill="yellow" /> </svg>'
+                        })
+                    });
+                }
+            );
+
+            backboneEvents.get().on("ready:vectorLayers", function () {
+                vectorLayers.switchLayer(layerName, true);
+            });
         });
+
 
         try {
             ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
@@ -282,7 +286,7 @@ module.exports = module.exports = {
                 DISQUS.reset({
                     reload: true,
                     config: function () {
-                        this.page.identifier = ""+id;
+                        this.page.identifier = "" + id;
                         this.page.url = "https://vidi.mapcentia.com/app/vmus?poi=" + id;
                     }
                 });

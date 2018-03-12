@@ -1,4 +1,6 @@
 <style>
+
+
     #list {
         position: absolute;
         height: 100%;
@@ -326,6 +328,24 @@
         margin-bottom: 20px;
     }
 
+    .start-list-icon {
+        margin-left: -17px;
+        width: 35px;
+        height: 45px;
+        transform: none;
+        z-index: 121;
+        position: relative;
+        display: inline-table;
+    }
+
+    .start-list-text {
+        position: relative;
+        margin-left: 14px;
+        max-width: 85%;
+        display: inline-table;
+
+    }
+
     @media (max-width: 767px) {
         .dialog-bottom {
             min-width: 100%;
@@ -338,6 +358,7 @@
             max-height: 60vh;
 
         }
+
         .navbar-brand.navbar-brand-text {
             display: none;
         }
@@ -363,16 +384,19 @@
 
         }
 
-        .navbar .navbar-brand {
+        .navbar-brand {
             height: 50px;
             padding: 10px 0px;
         }
     }
 
-
-
     .btn:not(.btn-raised):not(.btn-link):focus, .btn:not(.btn-raised):not(.btn-link):hover, .input-group-btn .btn:not(.btn-raised):not(.btn-link):focus, .input-group-btn .btn:not(.btn-raised):not(.btn-link):hover {
         background-color: #EEEEEE;
+    }
+
+    .container {
+        width: 100%;
+        margin: 0;
     }
 
 
@@ -382,10 +406,7 @@
 <div id="pane">
 
     <div id="container">
-        <div id="switcher">
-            <div id="btn-kort" class="active"><h3>Kort</h3></div>
-            <div id="btn-list"><h3>List</h3></div>
-        </div>
+
         <div id="map"></div>
         <div id="list">
             <div id="switcher-list">
@@ -406,13 +427,13 @@
 
         <div id="floating-container-secondary">
             <div id="locale-btn"></div>
-            <a href="#todo-list-dialog" id="todo-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
+            <a href="#todo-list-dialog" id="todo-btn" class="btn btn-info btn-fab btn-fab-mini map-tool-btn"><i
                     class="material-icons">directions</i></a>
             <a href="#base-layers-dialog" id="base-layers-btn"
                class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
                     class="material-icons">layers</i></a>
             <!--<a href="#print-dialog" id="print-dialog-btn" class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i-->
-                    <!--class="material-icons">print</i></a>-->
+            <!--class="material-icons">print</i></a>-->
         </div>
 
     </div>
@@ -422,19 +443,22 @@
         <div class="container">
             <div class="navbar-header">
 
-                <button type="button" class="navbar-toggle" id="burger-btn">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                <!--<button type="button" class="navbar-toggle" id="burger-btn">-->
+                    <!--<span class="icon-bar"></span>-->
+                    <!--<span class="icon-bar"></span>-->
+                    <!--<span class="icon-bar"></span>-->
+                <!--</button>-->
 
-                <img class="navbar-brand" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/vmus_rund_logo.png"><a class="navbar-brand navbar-brand-text" href="#">Vesthimmerland Museum</a>
+                <img class="navbar-brand"
+                     src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/vmus_rund_logo.png"><a
+                    class="navbar-brand navbar-brand-text" href="#">Vesthimmerland Museum</a>
 
             </div>
 
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a id="btn-about" href="#" data-toggle="modal" data-target="#about-model">Om</a></li>
+                    <li><a id="btn-about" href="#" data-toggle="modal" data-target="#about-modal">Om</a></li>
+                    <li><a id="btn-about" href="#" data-toggle="modal" data-target="#start-modal">Start</a></li>
                 </ul>
 
             </div>
@@ -576,7 +600,7 @@
     <div id="info-modal" class="slide-left">
         <div class="modal-header">
             <button type="button" class="close" aria-hidden="true">×</button>
-            <h3 class="modal-title">Den Gode Tur</h3>
+            <h3 class="modal-title">Din turguide</h3>
         </div>
         <div id="info-modal-body-wrapper">
             <div class="modal-body">
@@ -614,10 +638,72 @@
             </div>
             <div class="modal-body">
                 <div class="center">Det digitale turkort er udviklet af:</div>
-                <div><img class="center" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/vesthimmerlands_museum_logo.png"></div>
+                <div><img class="center"
+                          src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/vesthimmerlands_museum_logo.png">
+                </div>
                 <div class="center">Med støtte fra:</div>
                 <div><img class="center" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/lag_logo.png"></div>
-                <div><img class="center" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/NordeaFonden_Logo_Payoff_Black_RGB.png"></div>
+                <div><img class="center"
+                          src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/NordeaFonden_Logo_Payoff_Black_RGB.png">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{Close}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Start Modal -->
+<div class="modal fade" id="start-modal" tabindex="-1" role="dialog" aria-labelledby="start-modalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="start-modalLabel">Start</h4>
+            </div>
+            <div class="modal-body">
+                <p>Klik på de forskellige punkter på kortet og bliv klogere på udvalgte dele af den spændende,
+                    vesthimmerlandske kulturarv.</p>
+                <p>Punkterne på kortet er inddelt i fire forskellige kategorier, som indikerer forskellige ting:</p>
+                <ul>
+                    <li>
+                        <div class="leaflet-marker-icon extra-marker-star-red extra-marker leaflet-zoom-animated leaflet-clickable start-list-icon"
+                             tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
+                        <div class="start-list-text">Stjerne med et
+                            øje: Markerer at her findes der noget ganske særligt at opleve.
+                        </div>
+                    </li>
+                    <li>
+                        <div class="leaflet-marker-icon extra-marker-circle-red extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                             tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
+                        <div
+                                class="start-list-text">Cirkel med et øje: Markerer at her findes der en god fortælling, og der er
+                        ligeledes noget at se.</div>
+                    </li>
+                    <li><div
+                            class="leaflet-marker-icon extra-marker-square-red extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                            tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div><div
+                            class="start-list-text">Firkant med en bog: Markerer at her findes der en god fortælling, men der er
+                        ikke mere noget at opleve på selve stedet.</div>
+                    </li>
+                    <li><div
+                            class="leaflet-marker-icon extra-marker-star-green extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                            tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div><div
+                            class="start-list-text">Grøn stjerne med øje: Markerer at her findes der en særlig naturoplevelse og en
+                        god fortælling.</div>
+                    </li>
+                </ul>
+                <p>Inde under hvert punkt er det muligt at klikke på den (ikon indsættes) blå pil, som findes under de
+                    forskellige filmklip og fotos, hvorefter det valgte punkt tilføjes din personlige liste. Der kan
+                    tilføjes dét antal punkter til listen, som måtte ønskes, og slutteligt er det muligt at generere en
+                    rute rundt til de forskellige steder. Listen kan hele tiden tilgås ved at klikke på den blå pil, som
+                    findes yderst til højre på skærmen.</p>
+                <p>Det er ligeledes muligt at bidrage med viden omkring de forskellige punkter eller stille spørgsmål
+                    ved hjælp af den indlagte debatfunktion, Disqus, som findes under hvert punkt.</p>
+                <p>Har du lyst til at dele noget på Facebook eller Twitter? Intet problem! Klik blot på logoerne <i class="fa fa-facebook"></i> <i class="fa fa-twitter"></i> under hvert enkelt punkt.</p>
+                <p>God fornøjelse og rigtig god tur rundt i Vesthimmerland!</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{{Close}}</button>
