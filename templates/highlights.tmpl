@@ -346,6 +346,28 @@
 
     }
 
+    .nav .checkbox {
+        width: 140px;
+        display: inline-block;
+        height: 50px;
+        padding-top: 12px;
+    }
+    .nav .overlay-label {
+        width: 130px;
+        font-size: 18px;
+        font-weight: 300;
+    }
+
+    #burger-btn {
+        display: none;
+    }
+    #info-modal {
+        display: none;
+    }
+
+    #vectorlayers .panel:first-child {
+        display: none;
+    }
     @media (max-width: 767px) {
         .dialog-bottom {
             min-width: 100%;
@@ -363,12 +385,29 @@
             display: none;
         }
 
+        .nav .checkbox {
+            display: none;
+        }
+
+
+        #burger-btn {
+            display: inline;
+        }
+        #info-modal {
+            display: inline;
+        }
+
     }
 
     @media (min-width: 1200px) {
         .navbar-toggle {
             margin-top: 14px;
         }
+
+        .nav .checkbox {
+            padding-top: 17px;
+        }
+
 
     }
 
@@ -399,6 +438,41 @@
         margin: 0;
     }
 
+    .layer-count.badge {
+        display: none;
+    }
+
+    .nav .checkbox input[type=checkbox]:checked + .checkbox-material .check, label.checkbox-inline input[type=checkbox]:checked + .checkbox-material .check {
+        color: #fff;
+        border-color: #fff;
+        background-color: #fff;
+
+    }
+
+    .nav .checkbox .checkbox-material .check, label.checkbox-inline .checkbox-material .check {
+        border: 2px solid #bdbdbd;
+    }
+
+    .form-group.is-focused .checkbox label, .form-group.is-focused label.checkbox-inline {
+        color: #bdbdbd !important;
+    }
+
+    .panel-heading a, .panel-heading a:focus, .panel-heading a:hover {
+
+        text-decoration: none;
+    }
+
+
+
+    #btn-start {
+        font-size: 18px;
+        margin-right: 30px;
+    }
+
+    .refresh-vector-layer {
+        display: none !important;
+    }
+
 
 </style>
 
@@ -408,13 +482,7 @@
     <div id="container">
 
         <div id="map"></div>
-        <div id="list">
-            <div id="switcher-list">
-                <div id="btn-list-dis" class="active"><h3>Afstand</h3></div>
-                <div id="btn-list-alpha"><h3>A - Å</h3></div>
-            </div>
-            <div id="inner-list"></div>
-        </div>
+
 
         <div id="floating-container-primary">
             <a href="javascript:void(0)" id="zoom-in-btn" class="btn btn-default btn-fab btn-fab-mini"><i
@@ -456,8 +524,17 @@
             </div>
 
             <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a id="btn-start" href="#" data-toggle="modal" data-target="#start-modal">Start</a></li>
+
+                    <div class="checkbox"><label class="overlay-label"><input type="checkbox"
+                                                                                                  data-gc2-id-vec="v:punkter.spisning">Spisesteder</label>
+                    </div>
+                    <div class="checkbox"><label class="overlay-label"><input type="checkbox"
+                                                                                                  data-gc2-id-vec="v:punkter.overnatning">Overnatning</label>
+                    </div>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a id="btn-about" href="#" data-toggle="modal" data-target="#start-modal">Start</a></li>
                     <li><a id="btn-about" href="#" data-toggle="modal" data-target="#about-modal">Om</a></li>
                 </ul>
 
@@ -679,20 +756,30 @@
                         <div class="leaflet-marker-icon extra-marker-circle-red extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
                              tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
                         <div
-                                class="start-list-text">Cirkel med et øje: Markerer at her findes der en god fortælling, og der er
-                        ligeledes noget at se.</div>
+                                class="start-list-text">Cirkel med et øje: Markerer at her findes der en god fortælling,
+                            og der er
+                            ligeledes noget at se.
+                        </div>
                     </li>
-                    <li><div
-                            class="leaflet-marker-icon extra-marker-square-red extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
-                            tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div><div
-                            class="start-list-text">Firkant med en bog: Markerer at her findes der en god fortælling, men der er
-                        ikke mere noget at opleve på selve stedet.</div>
+                    <li>
+                        <div
+                                class="leaflet-marker-icon extra-marker-square-red extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                                tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
+                        <div
+                                class="start-list-text">Firkant med en bog: Markerer at her findes der en god
+                            fortælling, men der er
+                            ikke mere noget at opleve på selve stedet.
+                        </div>
                     </li>
-                    <li><div
-                            class="leaflet-marker-icon extra-marker-star-green extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
-                            tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div><div
-                            class="start-list-text">Grøn stjerne med øje: Markerer at her findes der en særlig naturoplevelse og en
-                        god fortælling.</div>
+                    <li>
+                        <div
+                                class="leaflet-marker-icon extra-marker-star-green extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                                tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
+                        <div
+                                class="start-list-text">Grøn stjerne med øje: Markerer at her findes der en særlig
+                            naturoplevelse og en
+                            god fortælling.
+                        </div>
                     </li>
                 </ul>
                 <p>Inde under hvert punkt er det muligt at klikke på den (ikon indsættes) blå pil, som findes under de
@@ -702,7 +789,8 @@
                     findes yderst til højre på skærmen.</p>
                 <p>Det er ligeledes muligt at bidrage med viden omkring de forskellige punkter eller stille spørgsmål
                     ved hjælp af den indlagte debatfunktion, Disqus, som findes under hvert punkt.</p>
-                <p>Har du lyst til at dele noget på Facebook eller Twitter? Intet problem! Klik blot på logoerne <i class="fa fa-facebook"></i> <i class="fa fa-twitter"></i> under hvert enkelt punkt.</p>
+                <p>Har du lyst til at dele noget på Facebook eller Twitter? Intet problem! Klik blot på logoerne <i
+                        class="fa fa-facebook"></i> <i class="fa fa-twitter"></i> under hvert enkelt punkt.</p>
                 <p>God fornøjelse og rigtig god tur rundt i Vesthimmerland!</p>
             </div>
             <div class="modal-footer">

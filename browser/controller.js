@@ -16,6 +16,8 @@ var highlights;
 var cloud;
 
 var setting;
+var vectorLayers;
+
 
 
 var jquery = require('jquery');
@@ -32,6 +34,7 @@ module.exports = {
         cloud = o.cloud;
         setting = o.setting;
         highlights = o.extensions.highlights.index;
+        vectorLayers = o.extensions.vectorLayers.index;
         return this;
     },
     init: function () {
@@ -187,6 +190,17 @@ module.exports = {
 
             });
         });
+
+        setTimeout(function () {
+            $("[data-gc2-id-vec]").on("change", function (e) {
+
+                vectorLayers.switchLayer(($(this).data('gc2-id-vec')), $(this).context.checked);
+
+                e.stopPropagation();
+
+
+            });
+        }, 2000)
     }
 };
 
