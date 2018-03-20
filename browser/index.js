@@ -114,7 +114,7 @@ var sourceShare =
     '<div id="share-buttons" style="text-align: center" class="bs-component btn-group-sm">' +
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="facebook" data-poi-id="{{id}}"><i class="material-icons fa fa-facebook"></i></a>' +
     '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="twitter" data-poi-id="{{id}}"><i class="material-icons fa fa-twitter"></i></a>' +
-    '<a href="javascript:void(0)" class="btn btn-info btn-fab btn-share" data-todo-id="{{id}}"><i class="material-icons">directions</i></a>' +
+    '<a href="javascript:void(0)" class="btn btn-info btn-fab btn-share" data-todo-id="{{id}}"><i class="material-icons">shopping_cart</i></a>' +
     '</div>' +
 
     '<script>' +
@@ -144,8 +144,7 @@ module.exports = module.exports = {
     },
     init: function () {
 
-        var parent = this, layerNames = ["v:punkter.poi", "v:punkter.natur"];
-
+        var parent = this, layerNames = ["v:punkter.poi", "v:punkter.natur", "v:punkter.spisning"];
         cloud.get().map.addLayer(tripLayer);
         cloud.get().map.addLayer(highLightLayer);
 
@@ -227,26 +226,30 @@ module.exports = module.exports = {
                         icon: L.ExtraMarkers.icon({
                             icon: feature.properties.icon === 1 ? 'fa-eye' :
                                 feature.properties.icon === 2 ? 'fa-eye' :
-                                    feature.properties.icon === 3 ? 'fa-book' : 'fa-question',
+                                    feature.properties.icon === 3 ? 'fa-book' :
+                                        feature.properties.icon === 4 ? 'fa-cutlery' : 'fa-question',
                             //number: 'V',
                             markerColor: layerName === "v:punkter.poi" ? 'red' :
-                                layerName === "v:punkter.natur" ? 'green' : 'black',
+                                layerName === "v:punkter.natur" ? 'green' :
+                                    layerName === "v:punkter.spisning" ? 'white' : 'black',
                             shape: feature.properties.icon === 1 ? 'star' :
                                 feature.properties.icon === 2 ? 'circle' :
-                                    feature.properties.icon === 3 ? 'square' : 'circle'
+                                    feature.properties.icon === 3 ? 'square' :
+                                        feature.properties.icon === 4 ? 'circle' : 'circle'
 
                             ,
                             prefix: 'fa',
-                            iconColor: "#fff",
+                            iconColor: feature.properties.icon === 4 ? '#777' : "#fff",
                             //innerHTML: '<svg width="20" height="30"> <circle cx="10" cy="15" r="10" stroke="green" stroke-width="1" fill="yellow" /> </svg>'
                         })
                     });
                 }
             );
+        });
 
-            backboneEvents.get().on("ready:vectorLayers", function () {
-                vectorLayers.switchLayer(layerName, true);
-            });
+        backboneEvents.get().on("ready:vectorLayers", function () {
+            vectorLayers.switchLayer("v:punkter.poi", true);
+            vectorLayers.switchLayer("v:punkter.natur", true);
         });
 
 
@@ -623,7 +626,7 @@ class TodoUpdateRouteBtn extends React.Component {
                     function (res) {
                         console.log(res);
                     });
-        }}>Opdaterer den foreslået rute</button>
+        }}>Opdater den foreslåede rute</button>
     }
 }
 
