@@ -214,7 +214,7 @@ module.exports = module.exports = {
             vectorLayers.setStyle(layerName,
                 {
                     weight: 5,
-                    color: '#ff00ff',
+                    color: '#ff0000',
                     dashArray: '',
                     fillOpacity: 0.2
                 }
@@ -263,6 +263,9 @@ module.exports = module.exports = {
     },
 
     createInfoContent: function (id) {
+
+        console.log(featuresWithKeys)
+        console.log(id)
 
         featuresWithKeys[id].text = converter.makeHtml(featuresWithKeys[id].tekst);
         featuresWithKeys[id].title = featuresWithKeys[id].titel;
