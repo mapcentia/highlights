@@ -68,7 +68,6 @@ handlebars.registerHelper('checklength', function (v1, v2, options) {
 
 var source1 =
     '<h1>{{{title}}}</h1>' +
-    '<div>{{{text}}}</div>' +
     '<div id="myCarousel" class="carousel slide" data-ride="carousel">' +
 
     '{{#checklength images 1}}' +
@@ -103,6 +102,9 @@ var source1 =
     '<img style="width: 100%" src="https://s3-eu-west-1.amazonaws.com/mapcentia-www/vmus/{{images.[0]}}" alt="">' +
 
     '{{/checklength}}' +
+
+    '<div class="vmus-text">{{{text}}}</div>' +
+
 
     '{{#if video}}' +
     '<div class="embed-responsive embed-responsive-16by9">' +
@@ -151,7 +153,7 @@ module.exports = module.exports = {
         layerNames.map(function (layerName) {
             vectorLayers.setOnEachFeature(layerName, function (feature, layer) {
                 layer.on("click", function () {
-                    parent.createInfoContent(feature.properties.id);
+                    createInfoContent(feature.properties.id);
                 });
             });
 
@@ -174,14 +176,14 @@ module.exports = module.exports = {
                         parr.pop();
                     }
 
-                    parent.createInfoContent(parr.join());
+                    createInfoContent(parr.join());
                 }
 
             });
 
             vectorLayers.setOnSelect(layerName, function (id, layer) {
 
-                parent.createInfoContent(layer.feature.properties.id);
+                createInfoContent(layer.feature.properties.id);
 
             });
 
@@ -247,9 +249,20 @@ module.exports = module.exports = {
             );
         });
 
+        vectorLayers.setStyle("v:punkter.k0820",
+            {
+                weight: 3,
+                color: '#ff0000',
+                opacity: 0.5,
+                dashArray: '',
+                fillOpacity: 0.0
+            }
+        );
+
         backboneEvents.get().on("ready:vectorLayers", function () {
             vectorLayers.switchLayer("v:punkter.poi", true);
             vectorLayers.switchLayer("v:punkter.natur", true);
+            vectorLayers.switchLayer("v:punkter.k0820", true);
         });
 
 
@@ -262,48 +275,6 @@ module.exports = module.exports = {
 
     },
 
-    createInfoContent: function (id) {
-
-        console.log(featuresWithKeys)
-        console.log(id)
-
-        featuresWithKeys[id].text = converter.makeHtml(featuresWithKeys[id].tekst);
-        featuresWithKeys[id].title = featuresWithKeys[id].titel;
-        featuresWithKeys[id].images = featuresWithKeys[id].billeder;
-
-        var html = template1(featuresWithKeys[id]);
-
-        var htmlShare = templateShare(featuresWithKeys[id]);
-
-        $("#click-modal").modal({});
-        $("#click-modalLabel").html(featuresWithKeys[id].navn);
-        $("#click-modal .modal-body").html(html + htmlShare);
-
-
-        if (typeof DISQUS === "undefined") {
-            var d = document, s = d.createElement("script");
-            s.src = "https://vidi-mapcentia-com.disqus.com/embed.js";
-            s.setAttribute("data-timestamp", +new Date());
-            (d.head || d.body).appendChild(s);
-        }
-
-        (function poll() {
-            if (typeof DISQUS !== "undefined") {
-                DISQUS.reset({
-                    reload: true,
-                    config: function () {
-                        this.page.identifier = "" + id;
-                        this.page.url = "https://vidi.mapcentia.com/app/vmus?poi=" + id;
-                    }
-                });
-            } else {
-                setTimeout(function () {
-                    poll();
-                }, 100)
-            }
-
-        })();
-    },
 
     renderListWithDistance: function () {
         var d, i;
@@ -372,6 +343,7 @@ module.exports = module.exports = {
         todoItems.push({
             index: 3,
             value: featuresWithKeys[id].titel,
+            id: id,
             done: false,
             geometry: featuresWithKeys[id].geometry
         });
@@ -401,6 +373,49 @@ module.exports = module.exports = {
 
         return true;
     }
+};
+
+var createInfoContent = function (id) {
+
+    console.log(featuresWithKeys)
+    console.log(id)
+
+    featuresWithKeys[id].text = converter.makeHtml(featuresWithKeys[id].tekst);
+    featuresWithKeys[id].title = featuresWithKeys[id].titel;
+    featuresWithKeys[id].images = featuresWithKeys[id].billeder;
+
+    var html = template1(featuresWithKeys[id]);
+
+    var htmlShare = templateShare(featuresWithKeys[id]);
+
+    $("#click-modal").modal({});
+    $("#click-modalLabel").html(featuresWithKeys[id].navn);
+    $("#click-modal .modal-body").html(html + htmlShare);
+
+
+    if (typeof DISQUS === "undefined") {
+        var d = document, s = d.createElement("script");
+        s.src = "https://vidi-mapcentia-com.disqus.com/embed.js";
+        s.setAttribute("data-timestamp", +new Date());
+        (d.head || d.body).appendChild(s);
+    }
+
+    (function poll() {
+        if (typeof DISQUS !== "undefined") {
+            DISQUS.reset({
+                reload: true,
+                config: function () {
+                    this.page.identifier = "" + id;
+                    this.page.url = "https://vidi.mapcentia.com/app/vmus?poi=" + id;
+                }
+            });
+        } else {
+            setTimeout(function () {
+                poll();
+            }, 100)
+        }
+
+    })();
 };
 
 /**
@@ -473,8 +488,6 @@ var createOsrmTripUrl = function (arr) {
                     if (coords.length > 1) {
 
                         googleUrl = "https://www.google.com/maps/dir/?api=1&origin=" + crd.latitude + "," + crd.longitude + "&destination=" + crd.latitude + "," + crd.longitude + "&waypoints=" + coordsR.join("|");
-
-                        console.log(googleUrl);
 
                         resolve(
                             {
@@ -561,6 +574,7 @@ class TodoListItem extends React.Component {
         super(props);
         this.onClickClose = this.onClickClose.bind(this);
         this.onClickDone = this.onClickDone.bind(this);
+        this.onClickShow = this.onClickShow.bind(this);
     }
 
     onClickClose() {
@@ -573,6 +587,11 @@ class TodoListItem extends React.Component {
         this.props.markTodoDone(index);
     }
 
+    onClickShow() {
+        var id = (this.props.item.id);
+        createInfoContent(id)
+    }
+
     render() {
         var todoClass = this.props.item.done ?
             "done" : "undone";
@@ -580,7 +599,7 @@ class TodoListItem extends React.Component {
             <li className="list-group-item">
                 <div className={todoClass}>
                     <span className="glyphicon glyphicon-ok icon" aria-hidden="true" onClick={this.onClickDone}></span>
-                    {this.props.item.value}
+                    <span style={{textDecoration: "underline", cursor: "pointer"}} onClick={this.onClickShow}>{this.props.item.value}</span>
                     <button type="button" className="close" onClick={this.onClickClose}>&times;</button>
                 </div>
             </li>
@@ -590,9 +609,9 @@ class TodoListItem extends React.Component {
 
 class TodoHeader extends React.Component {
     render() {
-        return <p>Hvis du er interesseret i at besøge en seværdig, så klik i info-vinduet på <i
-            className="material-icons inherit-size">directions</i> knappen. Så kommer seværdigen på listen. Kortet vil
-            foreslå en rute du kan tage rundt til de forskellige seværdiger. God tur!</p>
+        return <p>Hvis du er interesseret i at besøge en seværdighed, så klik på ikonet med den blå indkøbsvogn, og det
+            valgte punkt tilføjes en samlet liste. Vha. Google Maps er det senere muligt at få foreslået en rute rundt
+            til de valgte steder. Rigtig god tur!</p>
     }
 }
 
@@ -635,7 +654,8 @@ class TodoUpdateRouteBtn extends React.Component {
 
 class TodoGoogleLink extends React.Component {
     render() {
-        return <a target="_blank" href={googleUrl}>Google Maps</a>
+        return <a target="_blank" href={googleUrl} style={{"textDecoration": "underline"}}>Google Maps <i
+            className="fa fa-arrow-right" aria-hidden="true"></i></a>
     }
 }
 
