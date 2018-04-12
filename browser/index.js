@@ -273,6 +273,12 @@ module.exports = module.exports = {
 
         $("#locale-btn").append($(".leaflet-control-locate"));
 
+
+
+        // Remove Youtube video when closing modal
+        $('#click-modal').on('hidden.bs.modal', function (e) {
+            $(".embed-responsive").empty();
+        })
     },
 
 
@@ -366,19 +372,11 @@ module.exports = module.exports = {
                     console.log(res);
                 });
 
-        try {
-            ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
-        } catch (e) {
-        }
-
         return true;
     }
 };
 
 var createInfoContent = function (id) {
-
-    console.log(featuresWithKeys)
-    console.log(id)
 
     featuresWithKeys[id].text = converter.makeHtml(featuresWithKeys[id].tekst);
     featuresWithKeys[id].title = featuresWithKeys[id].titel;
@@ -426,8 +424,6 @@ var createInfoContent = function (id) {
  */
 var createOsrmTripUrl = function (arr) {
 
-    console.log(arr);
-
     tripLayer.clearLayers();
     highLightLayer.clearLayers();
 
@@ -467,7 +463,6 @@ var createOsrmTripUrl = function (arr) {
             navigator.geolocation.getCurrentPosition(
                 function (pos) {
                     var crd = pos.coords;
-
                     // Add home marker
                     L.marker([crd.latitude, crd.longitude], {
                         icon: L.AwesomeMarkers.icon({
@@ -485,13 +480,16 @@ var createOsrmTripUrl = function (arr) {
 
                     coords.unshift(crd.longitude + "," + crd.latitude);
 
+                    googleUrl = "https://www.google.com/maps/dir/?api=1&origin=" + crd.latitude + "," + crd.longitude + "&destination=" + crd.latitude + "," + crd.longitude + "&waypoints=" + coordsR.join("|");
+
+
                     if (coords.length > 1) {
 
-                        googleUrl = "https://www.google.com/maps/dir/?api=1&origin=" + crd.latitude + "," + crd.longitude + "&destination=" + crd.latitude + "," + crd.longitude + "&waypoints=" + coordsR.join("|");
 
                         resolve(
                             {
                                 url: "https://router.project-osrm.org/trip/v1/driving/" + coords.join(";") + "?overview=simplified&steps=false&hints=;&geometries=geojson",
+                                googleUrl: googleUrl,
                                 success: true
                             })
                     } else {
@@ -500,13 +498,16 @@ var createOsrmTripUrl = function (arr) {
                             message: "Less than two points"
                         });
                     }
+                    ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
+
                 },
 
                 function () {
                     reject({
                         code: 2,
-                        message: "ERROR"
+                        message: "Geolocation failed"
                     });
+                    alert("Kunne ikke finde din position")
                 },
 
                 {
@@ -518,7 +519,11 @@ var createOsrmTripUrl = function (arr) {
 
         } else {
 
-
+            alert("Ingen lokationsservice i din browser");
+            reject({
+                code: 1,
+                message: "No geolocation in browser"
+            });
         }
     })
 };
@@ -599,7 +604,8 @@ class TodoListItem extends React.Component {
             <li className="list-group-item">
                 <div className={todoClass}>
                     <span className="glyphicon glyphicon-ok icon" aria-hidden="true" onClick={this.onClickDone}></span>
-                    <span style={{textDecoration: "underline", cursor: "pointer"}} onClick={this.onClickShow}>{this.props.item.value}</span>
+                    <span style={{textDecoration: "underline", cursor: "pointer"}}
+                          onClick={this.onClickShow}>{this.props.item.value}</span>
                     <button type="button" className="close" onClick={this.onClickClose}>&times;</button>
                 </div>
             </li>
@@ -625,6 +631,7 @@ class TodoUpdateRouteBtn extends React.Component {
 
     render() {
         return <button className="btn btn-raised btn-default" style={this.fullWidth} onClick={function () {
+
             createOsrmTripUrl(todoItems)
 
                 .then(
