@@ -498,7 +498,6 @@ var createOsrmTripUrl = function (arr) {
                             message: "Less than two points"
                         });
                     }
-                    ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
 
                 },
 
@@ -550,11 +549,15 @@ var addTripLayer = function (url) {
                 message: "Trip added to map"
             })
 
+            ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
+
+
 
         }).fail(function () {
             reject({
                 message: "Trip NOT added to map"
             });
+            alert("Kunne ikke hente ruten!");
 
         })
     })
