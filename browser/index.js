@@ -231,7 +231,8 @@ module.exports = module.exports = {
                                     feature.properties.icon === 3 ? 'fa-book' :
                                         feature.properties.icon === 4 ? 'fa-cutlery' : 'fa-question',
                             //number: 'V',
-                            markerColor: feature.properties.farve || 'black',
+                            markerColor: layerName === "v:punkter.poi" || layerName === "v:punkter.natur" ? feature.properties.farve || 'black' :
+                                    layerName === "v:punkter.spisning" ? 'white' : 'black',
                             shape: feature.properties.icon === 1 ? 'star' :
                                 feature.properties.icon === 2 ? 'circle' :
                                     feature.properties.icon === 3 ? 'square' :
