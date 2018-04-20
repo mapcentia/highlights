@@ -339,15 +339,22 @@
         transform: none;
         z-index: 121;
         position: relative;
-        display: inline-table;
+        display: inline-block;
+        vertical-align: middle;
     }
 
     .start-list-text {
         position: relative;
         margin-left: 14px;
         max-width: 85%;
-        display: inline-table;
+        display: inline-block;
+        height: 42px;
+        vertical-align: middle;
 
+    }
+
+    .start-list-text p {
+        margin: 0;
     }
 
     .nav .checkbox {
@@ -750,47 +757,71 @@
                 <p>Punkterne på kortet er inddelt i fire forskellige kategorier og fire forskellige farver, som
                     indikerer forskellige ting:</p>
                 <br>
-                <p>Oldtid: blå</p>
-                <p>Bygninger og monumenter: Rød</p>
-                <p>Personer: Lyseblå</p>
-                <p>Natur: Grøn</p>
+                <ul>
+                    <li>
+                        <div class="leaflet-marker-icon extra-marker-circle-blue-dark extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                             tabindex="0" style=""><i style="color: #fff" class=""></i></div>
+                        <div class="start-list-text"><p>Oldtid</p></div>
+                    </li>
+                    <li>
+                        <div class="leaflet-marker-icon extra-marker-circle-red extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                             tabindex="0" style=""><i style="color: #fff" class=""></i></div>
+                        <div
+                                class="start-list-text"><p>Bygninger og monumenter</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="leaflet-marker-icon extra-marker-circle-blue extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                             tabindex="0" style=""><i style="color: #fff" class=""></i></div>
+                        <div
+                                class="start-list-text"><p>Personer</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="leaflet-marker-icon extra-marker-circle-green extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                             tabindex="0" style=""><i style="color: #fff" class=""></i></div>
+                        <div
+                                class="start-list-text"><p>Natur</p>
+                        </div>
+                    </li>
+                </ul>
                 <br>
                 <p>Ikoner:</p>
                 <ul>
                     <li>
-                        <div class="leaflet-marker-icon extra-marker-star-red extra-marker leaflet-zoom-animated leaflet-clickable start-list-icon"
+                        <div class="leaflet-marker-icon extra-marker-star-black extra-marker leaflet-zoom-animated leaflet-clickable start-list-icon"
                              tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
-                        <div class="start-list-text">Stjerne med et
-                            øje: Markerer at her findes der noget ganske særligt at opleve.
+                        <div class="start-list-text"><p>Stjerne med et
+                            øje: Markerer at her findes der noget ganske særligt at opleve.</p>
                         </div>
                     </li>
                     <li>
-                        <div class="leaflet-marker-icon extra-marker-circle-red extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                        <div class="leaflet-marker-icon extra-marker-circle-black extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
                              tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
                         <div
-                                class="start-list-text">Cirkel med et øje: Markerer at her findes der en god fortælling,
+                                class="start-list-text"><p>Cirkel med et øje: Markerer at her findes der en god fortælling,
                             og der er
-                            ligeledes noget at se.
+                            ligeledes noget at se.</p>
                         </div>
                     </li>
                     <li>
                         <div
-                                class="leaflet-marker-icon extra-marker-square-red extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                                class="leaflet-marker-icon extra-marker-square-black extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
                                 tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
                         <div
-                                class="start-list-text">Firkant med en bog: Markerer at her findes der en god
+                                class="start-list-text"><p>Firkant med en bog: Markerer at her findes der en god
                             fortælling, men der er
-                            ikke mere noget at opleve på selve stedet.
+                            ikke mere noget at opleve på selve stedet.</p>
                         </div>
                     </li>
                     <li>
                         <div
-                                class="leaflet-marker-icon extra-marker-star-green extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
+                                class="leaflet-marker-icon extra-marker-star-black extra-marker leaflet-zoom-animated leaflet-clickable  start-list-icon"
                                 tabindex="0" style=""><i style="color: #fff" class=" fa fa-eye"></i></div>
                         <div
-                                class="start-list-text">Grøn stjerne med øje: Markerer at her findes der en særlig
+                                class="start-list-text"><p>Grøn stjerne med øje: Markerer at her findes der en særlig
                             naturoplevelse og en
-                            god fortælling.
+                            god fortælling.</p>
                         </div>
                     </li>
                 </ul>
