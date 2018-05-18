@@ -282,13 +282,11 @@ module.exports = module.exports = {
         });
 
         cloud.get().on("zoomend", function () {
-            console.log(cloud.get().getZoom())
             if (cloud.get().map.getZoom() < 9) {
                 cloud.get().map.setZoom(9);
             }
         });
     },
-
 
     renderListWithDistance: function () {
         var d, i;
