@@ -146,7 +146,8 @@ module.exports = module.exports = {
     },
     init: function () {
 
-        var parent = this, layerNames = ["v:punkter.poi", "v:punkter.natur", "v:punkter.spisning"];
+        var parent = this,
+            layerNames = ["v:punkter.poi", "v:punkter.natur", "v:punkter.spisning", "v:punkter.overnatning"];
         cloud.get().map.addLayer(tripLayer);
         cloud.get().map.addLayer(highLightLayer);
 
@@ -229,18 +230,20 @@ module.exports = module.exports = {
                             icon: feature.properties.icon === 1 ? 'fa-eye' :
                                 feature.properties.icon === 2 ? 'fa-eye' :
                                     feature.properties.icon === 3 ? 'fa-book' :
-                                        feature.properties.icon === 4 ? 'fa-cutlery' : 'fa-question',
-                            //number: 'V',
+                                        feature.properties.icon === 4 ? 'fa-cutlery' :
+                                            feature.properties.icon === 5 ? 'fa-bed' : 'fa-question',
+
                             markerColor: layerName === "v:punkter.poi" || layerName === "v:punkter.natur" ? feature.properties.farve || 'black' :
-                                    layerName === "v:punkter.spisning" ? 'white' : 'black',
+                                layerName === "v:punkter.spisning" || "v:punkter.overnatning" ? 'white' : 'black',
+
                             shape: feature.properties.icon === 1 ? 'star' :
                                 feature.properties.icon === 2 ? 'circle' :
                                     feature.properties.icon === 3 ? 'square' :
-                                        feature.properties.icon === 4 ? 'circle' : 'circle'
-
+                                        feature.properties.icon === 4 || feature.properties.icon === 5 ? 'circle' : 'circle'
                             ,
+
                             prefix: 'fa',
-                            iconColor: feature.properties.icon === 4 ? '#777' : "#fff",
+                            iconColor: feature.properties.icon === 4 || feature.properties.icon === 5 ? '#777' : "#fff",
                             //innerHTML: '<svg width="20" height="30"> <circle cx="10" cy="15" r="10" stroke="green" stroke-width="1" fill="yellow" /> </svg>'
                         })
                     });
@@ -271,7 +274,6 @@ module.exports = module.exports = {
         }
 
         $("#locale-btn").append($(".leaflet-control-locate"));
-
 
 
         // Remove Youtube video when closing modal
@@ -549,7 +551,6 @@ var addTripLayer = function (url) {
             })
 
             ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
-
 
 
         }).fail(function () {
