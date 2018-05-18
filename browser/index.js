@@ -170,14 +170,16 @@ module.exports = module.exports = {
                 });
 
                 // Open POI if any
-                if (urlVars.poi !== undefined) {
+                if(layerName === "v:punkter.poi") {
+                    if (urlVars.poi !== undefined) {
 
-                    var parr = urlVars.poi.split("#");
-                    if (parr.length > 1) {
-                        parr.pop();
+                        var parr = urlVars.poi.split("#");
+                        if (parr.length > 1) {
+                            parr.pop();
+                        }
+
+                        createInfoContent(parr.join());
                     }
-
-                    createInfoContent(parr.join());
                 }
 
             });
@@ -185,7 +187,6 @@ module.exports = module.exports = {
             vectorLayers.setOnSelect(layerName, function (id, layer) {
 
                 createInfoContent(layer.feature.properties.id);
-
             });
 
             vectorLayers.setOnMouseOver(layerName, _.debounce(function (id, layer) {
