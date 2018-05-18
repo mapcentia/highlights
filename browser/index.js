@@ -279,7 +279,14 @@ module.exports = module.exports = {
         // Remove Youtube video when closing modal
         $('#click-modal').on('hidden.bs.modal', function (e) {
             $(".embed-responsive").empty();
-        })
+        });
+
+        cloud.get().on("zoomend", function () {
+            console.log(cloud.get().getZoom())
+            if (cloud.get().map.getZoom() < 9) {
+                cloud.get().map.setZoom(9);
+            }
+        });
     },
 
 
