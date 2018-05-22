@@ -200,6 +200,14 @@
         list-style: none;
     }
 
+    #start-modal ul {
+        padding-left: 5px;
+    }
+
+    #start-modal li {
+        margin-bottom: 7px;
+    }
+
     .form-inline .form-control {
         width: 50%;
         margin-left: 80px;
@@ -348,7 +356,6 @@
         margin-left: 14px;
         max-width: 85%;
         display: inline-block;
-        height: 42px;
         vertical-align: middle;
 
     }
@@ -380,6 +387,14 @@
 
     #vectorlayers .panel:first-child {
         display: none;
+    }
+
+    #count-badge {
+
+        position: absolute;
+        right: 16px;
+        top: -2px;
+        font-size: 10pt;
     }
 
     @media (max-width: 767px) {
@@ -506,8 +521,11 @@
 
         <div id="floating-container-secondary">
             <div id="locale-btn"></div>
-            <a href="#todo-list-dialog" id="todo-btn" class="btn btn-info btn-fab btn-fab-mini map-tool-btn"><i
-                    class="material-icons">shopping_cart</i></a>
+            <a href="#todo-list-dialog" id="todo-btn" class="btn btn-info btn-fab btn-fab-mini map-tool-btn">
+                <div id="count-badge">
+                   0
+                </div>
+                <i class="material-icons">shopping_cart</i></a>
             <a href="#base-layers-dialog" id="base-layers-btn"
                class="btn btn-default btn-fab btn-fab-mini map-tool-btn"><i
                     class="material-icons">layers</i></a>

@@ -554,8 +554,7 @@ var addTripLayer = function (url) {
             tripLayer.addData(data.trips[0].geometry);
             resolve({
                 message: "Trip added to map"
-            })
-
+            });
             ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
 
 
@@ -564,6 +563,7 @@ var addTripLayer = function (url) {
                 message: "Trip NOT added to map"
             });
             alert("Kunne ikke hente ruten!");
+            ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
 
         })
     })
@@ -571,6 +571,8 @@ var addTripLayer = function (url) {
 
 class TodoList extends React.Component {
     render() {
+        console.log(this.props.items.length)
+        $("#count-badge").html(this.props.items.length || "0");
         var items = this.props.items.map((item, index) => {
             return (
                 <TodoListItem key={index} item={item} index={index} removeItem={this.props.removeItem}
@@ -690,11 +692,15 @@ class TodoApp extends React.Component {
             value: todoItem.newItemValue,
             done: false
         });
+
         this.setState({todoItems: todoItems});
+
+
     }
 
     removeItem(itemIndex) {
         todoItems.splice(itemIndex, 1);
+
         this.setState({todoItems: todoItems});
 
         createOsrmTripUrl(this.state.todoItems)
