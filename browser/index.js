@@ -487,15 +487,13 @@ var createOsrmTripUrl = function (arr) {
 
                     coords.unshift(crd.longitude + "," + crd.latitude);
 
-                    googleUrl = "https://www.google.com/maps/dir/?api=1&origin=" + crd.latitude + "," + crd.longitude + "&destination=" + crd.latitude + "," + crd.longitude + "&waypoints=" + coordsR.join("|");
-
+                    googleUrl = "https://www.google.com/maps/dir/?api=1&origin=" + crd.latitude + "," + crd.longitude + "&destination=" + coordsR.pop() + "&waypoints=" + coordsR.join("|");
 
                     if (coords.length > 1) {
 
-
                         resolve(
                             {
-                                url: "https://router.project-osrm.org/trip/v1/driving/" + coords.join(";") + "?overview=simplified&steps=false&hints=;&geometries=geojson",
+                                url: "https://router.project-osrm.org/trip/v1/driving/" + coords.join(";") + "?roundtrip=true&source=first&overview=simplified&steps=false&hints=;&geometries=geojson",
                                 googleUrl: googleUrl,
                                 success: true
                             })
@@ -562,7 +560,7 @@ var addTripLayer = function (url) {
             reject({
                 message: "Trip NOT added to map"
             });
-            alert("Kunne ikke hente ruten!");
+            //alert("Kunne ikke hente ruten!");
             ReactDOM.render(<TodoApp initItems={todoItems}/>, document.getElementById('app'));
 
         })
