@@ -509,9 +509,9 @@ var createOsrmTripUrl = function (arr) {
                 function () {
                     reject({
                         code: 2,
-                        message: "Geolocation failed"
+                        message: "F"
                     });
-                    alert("Kunne ikke finde din position")
+                    alert("Kunne ikke finde din position. Tjek venligst at lokalitetstjenester er slået til.")
                 },
 
                 {
@@ -523,7 +523,7 @@ var createOsrmTripUrl = function (arr) {
 
         } else {
 
-            alert("Ingen lokationsservice i din browser");
+                alert("Ingen lokationsservice i din browser");
             reject({
                 code: 1,
                 message: "No geolocation in browser"
