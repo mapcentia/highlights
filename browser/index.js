@@ -114,8 +114,8 @@ var source1 =
 
 var sourceShare =
     '<div id="share-buttons" style="text-align: center" class="bs-component btn-group-sm">' +
-    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="facebook" data-poi-id="{{id}}"><i class="material-icons fa fa-facebook"></i></a>' +
-    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="twitter" data-poi-id="{{id}}"><i class="material-icons fa fa-twitter"></i></a>' +
+    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="facebook" data-poi-id="{{id}}"><i class="material-icons fas fa-facebook"></i></a>' +
+    '<a href="javascript:void(0)" class="btn btn-default btn-fab btn-share" data-some-site="twitter" data-poi-id="{{id}}"><i class="material-icons fas fa-twitter"></i></a>' +
     '<a href="javascript:void(0)" class="btn btn-info btn-fab btn-share" data-todo-id="{{id}}"><i class="material-icons">shopping_cart</i></a>' +
     '</div>' +
 
